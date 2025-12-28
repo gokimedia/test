@@ -1,0 +1,123 @@
+# SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: MIT
+name: Litmus
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+      - stable*
+
+env:
+  APP_NAME: files_lock
+
+permissions:
+  contents: read
+
+jobs:
+  litmus:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['8.2']
+        databases: ['mysql']
+        server-versions: ['master']
+
+    name: litmus ${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.server-versions }}
+
+    services:
+      postgres:
+        image: ghcr.io/nextcloud/continuous-integration-postgres-16:latest # zizmor: ignore[unpinned-images]
+        ports:
+          - 4445:5432/tcp
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: rootpassword
+          POSTGRES_DB: nextcloud
+        options: --health-cmd pg_isready --health-interval 5s --health-timeout 2s --health-retries 5
+      mysql:
+        image: ghcr.io/nextcloud/continuous-integration-mariadb-11.4:latest # zizmor: ignore[unpinned-images]
+        ports:
+          - 4444:3306/tcp
+        env:
+          MARIADB_ROOT_PASSWORD: rootpassword
+        options: --health-cmd="mariadb-admin ping" --health-interval 5s --health-timeout 2s --health-retries 5
+
+    steps:
+      - name: Checkout server
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+          submodules: true
+          repository: nextcloud/server
+          ref: ${{ matrix.server-versions }}
+
+      - name: Checkout app
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+          path: apps/${{ env.APP_NAME }}
+
+      - name: Set up php ${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # v2.35.5
+        with:
+          php-version: ${{ matrix.php-versions }}
+          tools: phpunit
+          extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, sqlite, pdo_sqlite, mysql, pdo_mysql, pgsql, pdo_pgsql
+          coverage: none
+          ini-values: zend.exception_ignore_args=0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up PHPUnit
+        working-directory: apps/${{ env.APP_NAME }}
+        run: composer i
+
+      - name: Set up Nextcloud
+        run: |
+          if [ "${{ matrix.databases }}" = "mysql" ]; then
+            export DB_PORT=4444
+          elif [ "${{ matrix.databases }}" = "pgsql" ]; then
+            export DB_PORT=4445
+          fi
+          mkdir data
+          ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
+          ./occ app:enable --force ${{ env.APP_NAME }}
+          php -S localhost:8080 &
+
+      - name: Litmus
+        run: |
+          mkdir -p /tmp/litmus && \
+          cp apps/files_lock/tests/litmus/0001-Comment-out-collection-locking-tests.patch /tmp/litmus/ && \
+          wget -O /tmp/litmus/litmus-0.13.tar.gz http://www.webdav.org/neon/litmus/litmus-0.13.tar.gz && \
+          cd /tmp/litmus && tar -xzf litmus-0.13.tar.gz
+
+          cd /tmp/litmus/litmus-0.13
+          patch -p1 < ../0001-Comment-out-collection-locking-tests.patch
+          ./configure && make && rm -f /tmp/litmus-0.13.tar.gz
+
+          cd /tmp/litmus/litmus-0.13
+          make URL=http://localhost:8080/remote.php/dav/files/admin CREDS="admin admin" TESTS="basic copymove props locks" check
+
+      - name: Dump Nextcloud log
+        if: failure()
+        run: cat data/nextcloud.log
+
+      - name: Upload litmus logs
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        if: failure()
+        with:
+          name: Upload litmus log
+          path: /tmp/litmus/litmus-0.13/debug.log
+          retention-days: 5
+
+      - name: Upload nextcloud logs
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        if: failure()
+        with:
+          name: Upload nextcloud log
+          path: data/nextcloud.log
+          retention-days: 5

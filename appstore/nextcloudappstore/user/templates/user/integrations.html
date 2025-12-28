@@ -1,0 +1,58 @@
+{% extends "user/base.html" %}
+{% load i18n %}
+{% load static %}
+
+{# SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors #}
+{# SPDX-License-Identifier: AGPL-3.0-or-later #}
+
+{% block head-title %}{% trans 'Integrations' %} - {% endblock %}
+
+{% block account-content %}
+    {% if pending and user.is_superuser %}
+        <h1>{% trans "Pending approval" %}</h1>
+        <section>
+            <table class="table table-striped">
+                <tr>
+                    <th>{% trans 'Integration name' %}</th>
+                    <th>{% trans 'Actions' %}</th>
+                </tr>
+                {% for app in pending %}
+                    <tr>
+                        <td>{{ app.name }}</td>
+                        <td>
+                            <form action="{% url 'user:account-integration-moderate' pk=app.id %}" method="get">
+                                {% csrf_token %}
+                                <button class="btn btn-primary btn-block" type="submit">{% trans 'View' %}</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </section>
+    {% endif %}
+
+    <h1>{% trans "Your integrations" %}</h1>
+    <section>
+        {% if apps %}
+            <table class="table table-striped">
+                <tr>
+                    <th>{% trans 'Integration name' %}</th>
+                    <th>{% trans 'Actions' %}</th>
+                </tr>
+                {% for app in apps %}
+                    <tr>
+                        <td>{{ app.name }}</td>
+                        <td>
+                            <form action="{% url 'user:account-integration' pk=app.id %}" method="get">
+                                {% csrf_token %}
+                                <button class="btn btn-primary btn-block" type="submit">{% trans 'Edit' %}</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p class="alert alert-info">{% trans 'You have not submitted any integration yet or they are pending approval!' %}</p>
+        {% endif %}
+    </section>
+{% endblock %}

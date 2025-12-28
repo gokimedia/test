@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+composer.phar
+
+/node_modules
+
+build/
+vendor/
+
+/.php_cs.cache
+/.php-cs-fixer.cache
+
+# Ignore NetBeans project
+/nbproject/
+
+tests/clover.xml
+tests/.phpunit.result.cache
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

@@ -1,0 +1,12 @@
+{ "translations": {
+    "Saved" : "Gespäichert",
+    "Host" : "Host",
+    "Port" : "Port",
+    "Select" : "Select",
+    "Yes" : "Jo",
+    "No" : "Nee",
+    "Save" : "Späicheren",
+    "Advanced" : "Erweidert",
+    "Description" : "Beschreiwung"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

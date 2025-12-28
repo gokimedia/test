@@ -1,0 +1,32 @@
+{
+  "name": "nextcloud/bruteforcesttings",
+  "description": "Lint config for nextcloud/bruteforcesettings",
+  "license": "MIT",
+  "config": {
+    "optimize-autoloader": true,
+    "classmap-authoritative": true,
+    "platform": {
+      "php": "8.2"
+    },
+    "allow-plugins": {
+      "bamarni/composer-bin-plugin": true
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "[ $COMPOSER_DEV_MODE -eq 0 ] || composer bin all install",
+      "composer dump-autoload"
+    ],
+    "lint": "find . -name \\*.php -not -path './vendor/*' -not -path './build/*' -print0 | xargs -0 -n1 php -l",
+    "cs:check": "php-cs-fixer fix --dry-run --diff",
+    "cs:fix": "php-cs-fixer fix",
+    "psalm": "psalm --no-cache --threads=$(nproc)",
+    "psalm:dev": "@psalm",
+    "psalm:update-baseline": "psalm --threads=1 --update-baseline",
+    "test:unit": "phpunit --color -c tests/phpunit.xml"
+  },
+  "require-dev": {
+    "bamarni/composer-bin-plugin": "^1.8",
+    "nextcloud/ocp": "dev-master"
+  }
+}

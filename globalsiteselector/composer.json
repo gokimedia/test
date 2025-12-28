@@ -1,0 +1,75 @@
+{
+    "name": "nextcloud/globalsiteselector",
+    "description": "globalsiteselector",
+    "minimum-stability": "stable",
+    "license": "agpl",
+    "config": {
+        "allow-plugins": {
+            "bamarni/composer-bin-plugin": true
+        },
+        "optimize-autoloader": true,
+        "classmap-authoritative": true,
+        "autoloader-suffix": "GlobalSiteSelector",
+        "platform": {
+            "php": "8.2"
+        },
+        "sort-packages": true
+    },
+    "authors": [
+        {
+            "name": "Maxence Lange",
+            "email": "maxence@artificial-owl.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "OCA\\GlobalSiteSelector\\": "lib/"
+        }
+    },
+    "scripts": {
+        "cs:fix": "./vendor-bin/csfixer/vendor/bin/php-cs-fixer fix",
+        "cs:check": "./vendor-bin/csfixer/vendor/bin/php-cs-fixer fix --dry-run --diff",
+        "lint": "find . -name \\*.php -not -path './vendor/*' -not -path './tests/stubs/*' -print0 | xargs -0 -n1 php -l",
+        "psalm": "./vendor-bin/psalm/vendor/bin/psalm --threads=1",
+        "psalm:clear": "./vendor-bin/psalm/vendor/bin/psalm --clear-cache && ./vendor-bin/psalm/vendor/bin/psalm --clear-global-cache",
+        "psalm:fix": "./vendor-bin/psalm/vendor/bin/psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
+        "test:unit": "./vendor-bin/phpunit/vendor/bin/phpunit -c tests/phpunit.xml --color --fail-on-warning --fail-on-risky",
+        "rector": "rector && composer cs:fix",
+        "post-install-cmd": [
+            "\"vendor-bin/mozart/vendor/bin/mozart\" compose",
+            "@composer dump-autoload"
+        ],
+        "post-update-cmd": [
+            "\"vendor-bin/mozart/vendor/bin/mozart\" compose",
+            "composer dump-autoload"
+        ]
+    },
+    "require": {
+        "bamarni/composer-bin-plugin": "^1.8",
+        "firebase/php-jwt": "^6.8"
+    },
+    "extra": {
+        "bamarni-bin": {
+            "bin-links": false,
+            "target-directory": "vendor-bin",
+            "forward-command": true
+        },
+        "mozart": {
+            "dep_namespace": "OCA\\GlobalSiteSelector\\Vendor\\",
+            "dep_directory": "/lib/Vendor/",
+            "classmap_directory": "/lib/autoload/",
+            "classmap_prefix": "GLOBALSITESELECTOR_",
+            "packages": [
+                "firebase/php-jwt"
+            ]
+        }
+    },
+    "require-dev": {
+        "nextcloud/ocp": "dev-master"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "OCP\\": "vendor/nextcloud/ocp/OCP"
+        }
+    }
+}

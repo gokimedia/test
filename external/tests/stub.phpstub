@@ -1,0 +1,30 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @copyright 2019, Roeland Jago Douma <roeland@famdouma.nl>
+ * @author John Molakvoæ <skjnldsv@protonmail.com>
+ * @author Morris Jobke <hey@morrisjobke.de>
+ * @author Roeland Jago Douma <roeland@famdouma.nl>
+ * @license GNU AGPL version 3 or any later version
+ *
+ * SPDX-FileCopyrightText: 2019 John Molakvoæ <skjnldsv@protonmail.com>
+ * SPDX-FileCopyrightText: 2019 Morris Jobke <hey@morrisjobke.de>
+ * SPDX-FileCopyrightText: 2019 Roeland Jago Douma <roeland@famdouma.nl>
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+ 
+namespace OCA\Files\Event;
+
+use OCP\EventDispatcher\Event;
+
+class LoadAdditionalScriptsEvent extends Event {
+	private $hiddenFields = [];
+
+	public function addHiddenField(string $name, string $value): void {
+	}
+
+	public function getHiddenFields(): array {
+	}
+}

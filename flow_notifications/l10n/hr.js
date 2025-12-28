@@ -1,0 +1,10 @@
+OC.L10N.register(
+    "flow_notifications",
+    {
+    "Send a notification" : "Pošaljite obavijest",
+    "Triggers a notification" : "Aktivira slanje obavijesti",
+    "Flow Notifications" : "Flow obavijesti",
+    "Notification action for Nextcloud Flow" : "Obavijest za Nextcloud Flow",
+    "Choose a notification title (optional)" : "Odaberite naslov obavijesti (neobvezno)"
+},
+"nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

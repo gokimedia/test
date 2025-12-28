@@ -1,0 +1,10 @@
+# Exclude build stuff
+build
+
+# Node
+/node_modules
+/js/dist
+/vendor
+/vendor-bin/*/vendor
+/lib/Vendor
+.php-cs-fixer.cache

@@ -1,0 +1,27 @@
+OC.L10N.register(
+    "files_texteditor",
+    {
+    "Saving …" : "Vista …",
+    "Saved!" : "Vistað!",
+    "Saved" : "Vistað",
+    "There was a problem saving your changes. Click to resume editing." : "Það kom upp vandamál við að vista breytingarnar þínar. Smelltu til að halda ritun áfram.",
+    "Edit in plain text editor" : "Breyta með hreinum textaritli",
+    "An error occurred!" : "Villa kom upp!",
+    "Edit" : "Breyta",
+    "Mixed" : "Blandað",
+    "Preview" : "Forskoðun",
+    "New text file" : "Ný textaskrá",
+    "New text file.txt" : "Ný textaskrá.txt",
+    "This file is too big to be opened. Please download the file instead." : "Þessi skrá er of stór til að opna hana hér. Halaðu henni niður í staðinn.",
+    "Cannot read the file." : "Get ekki lesið skrána.",
+    "Invalid file path supplied." : "Ógild skráarslóð.",
+    "The file is locked." : "Skráin er læst.",
+    "An internal server error occurred." : "Innri villa kom upp.",
+    "Could not write to file." : "Ekki tókst að skrifa í skrá.",
+    "Share not found" : "Sameign fannst ekki",
+    "You are not authorized to open this share" : "Þú hefur ekki heimild til að opna þessa sameign",
+    "Invalid range request" : "Ógild fyrirspurn um gagnasvið",
+    "Plain text editor" : "Ritill fyrir hreinan texta",
+    "Open, save and edit text files" : "Opna, vista og breyta textaskrám"
+},
+"nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

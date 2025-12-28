@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
+  <file src="lib/Fs/UserFolderHelper.php">
+    <UndefinedClass>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[NoUserException]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Listeners/CollectivesReferenceListener.php">
+    <MissingTemplateParam>
+      <code><![CDATA[IEventListener]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="lib/Mount/CollectiveFolderManager.php">
+    <InvalidArgument>
+      <code><![CDATA[$maskedStorage]]></code>
+    </InvalidArgument>
+  </file>
+  <file src="lib/Service/CollectiveService.php">
+    <UndefinedClass>
+      <code><![CDATA[File]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Service/PageService.php">
+    <UndefinedClass>
+      <code><![CDATA[$this->pushQueue]]></code>
+      <code><![CDATA[?IQueue]]></code>
+      <code><![CDATA[IQueue]]></code>
+      <code><![CDATA[OC_Util]]></code>
+    </UndefinedClass>
+  </file>
+</files>

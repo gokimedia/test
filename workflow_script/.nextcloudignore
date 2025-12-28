@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+composer.*
+.drone.yml
+.git
+.github
+.gitignore
+krankerl.toml
+l10n/.gitkeep
+.nextcloudignore
+.php-cs-fixer.dist.php
+psalm.xml
+README.md
+screenshots
+tests
+.tx

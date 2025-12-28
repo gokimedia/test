@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{# SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors #}
+{# SPDX-License-Identifier: AGPL-3.0-or-later #}
+
+{% load css_class socialaccount i18n %}
+
+{% block head-title %}{% trans "Register" %} - {% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+    <div class="central-form">
+        <h4>{% trans 'Create an account' %}</h4>
+        <div class="auth-form">
+            <form method="POST" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+                {% include 'form-fields.html' %}
+                <div class="actions">
+                    <button class="btn btn-primary btn-block"
+                            type="submit">
+                        <span class="icon material-symbols-outlined">app_registration</span>
+                        {% trans 'Register' %}
+                    </button>
+                    {% get_providers as socialaccount_providers %}
+                    {% for provider in socialaccount_providers %}
+                        <a title="{{ provider.name }}"
+                           class="socialaccount_provider {{ provider.id }} btn btn-default btn-light"
+                           href="{% provider_login_url provider.id process='login' scope=scope auth_params=auth_params %}">
+                            <span class="icon material-symbols-outlined">login</span>
+                            {% trans 'Log in with GitHub' %}
+                        </a>
+                    {% endfor %}
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

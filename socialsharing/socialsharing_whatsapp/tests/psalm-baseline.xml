@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="6.8.2@720ed6b578ac24f9543c65c3d4cecea0ff348ccd">
+  <file src="lib/AppInfo/Application.php">
+    <ImplementedParamTypeMismatch>
+      <code><![CDATA[$event]]></code>
+    </ImplementedParamTypeMismatch>
+    <InvalidArgument>
+      <code><![CDATA[self::class]]></code>
+      <code><![CDATA[self::class]]></code>
+    </InvalidArgument>
+    <InvalidTemplateParam>
+      <code><![CDATA[IEventListener]]></code>
+    </InvalidTemplateParam>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function boot(IBootContext $context): void {]]></code>
+      <code><![CDATA[public function handle(Event $event): void {]]></code>
+      <code><![CDATA[public function register(IRegistrationContext $context): void {]]></code>
+    </MissingOverrideAttribute>
+    <UndefinedClass>
+      <code><![CDATA[\OCA\Files\Event\LoadAdditionalScriptsEvent]]></code>
+      <code><![CDATA[\OCA\Files\Event\LoadSidebar]]></code>
+    </UndefinedClass>
+    <UndefinedDocblockClass>
+      <code><![CDATA[Application]]></code>
+      <code><![CDATA[Application]]></code>
+    </UndefinedDocblockClass>
+  </file>
+</files>

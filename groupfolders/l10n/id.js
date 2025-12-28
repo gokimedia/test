@@ -1,0 +1,25 @@
+OC.L10N.register(
+    "groupfolders",
+    {
+    "Deny" : "Tolak",
+    "Allow" : "Izinkan",
+    "Group" : "Grup",
+    "Read" : "Baca",
+    "Create" : "Buat",
+    "Delete" : "Hapus",
+    "Share" : "Bagikan",
+    "Select a user or group" : "Pilih pengguna atau grup",
+    "Add group" : "Tambah grup",
+    "Default" : "Default",
+    "Unlimited" : "Tak terbatas",
+    "Folder name" : "Nama Folder",
+    "Quota" : "Kuota",
+    "Previous" : "Sebelumnya",
+    "Next" : "Berikutnya",
+    "User" : "Pengguna",
+    "Unknown" : "Tidak diketahui",
+    "None" : "Tidak ada",
+    "{size} used" : "{size} digunakan",
+    "Unset" : "Belum disetel"
+},
+"nplurals=1; plural=0;");

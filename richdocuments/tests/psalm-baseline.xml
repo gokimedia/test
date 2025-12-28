@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="6.5.1@3f17a6b24a2dbe543e21408c2b19108cf6a355ef">
+  <file src="lib/AppConfig.php">
+    <InvalidArgument>
+      <code><![CDATA[[]]]></code>
+    </InvalidArgument>
+    <RedundantCondition>
+      <code><![CDATA[array_key_exists($key, self::APP_SETTING_TYPES) && self::APP_SETTING_TYPES[$key] === 'array']]></code>
+    </RedundantCondition>
+  </file>
+  <file src="lib/Command/ActivateConfig.php">
+    <UndefinedClass>
+      <code><![CDATA[Command]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Command/ConvertToBigInt.php">
+    <UndefinedClass>
+      <code><![CDATA[Command]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Command/InstallDefaultFonts.php">
+    <UndefinedClass>
+      <code><![CDATA[Command]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Command/UpdateEmptyTemplates.php">
+    <UndefinedClass>
+      <code><![CDATA[Command]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Controller/DocumentAPIController.php">
+    <UndefinedClass>
+      <code><![CDATA[\OCA\Files\Helper]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Controller/DocumentController.php">
+    <InvalidScalarArgument>
+      <code><![CDATA[$node->getId()]]></code>
+    </InvalidScalarArgument>
+    <RedundantCondition>
+      <code><![CDATA[$app !== '']]></code>
+    </RedundantCondition>
+  </file>
+  <file src="lib/Controller/OCSController.php">
+    <UndefinedClass>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[BadResponseException]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Controller/SettingsController.php">
+    <UndefinedClass>
+      <code><![CDATA[NullOutput]]></code>
+      <code><![CDATA[NullOutput]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Controller/TemplatesController.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[$this->fetchPreview($template, $x, $y, $a, $forceIcon, $mode)]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[DataResponse]]></code>
+    </InvalidReturnType>
+    <InvalidThrow>
+      <code><![CDATA[NotFoundResponse]]></code>
+    </InvalidThrow>
+  </file>
+  <file src="lib/Controller/WopiController.php">
+    <InvalidArgument>
+      <code><![CDATA[fn ($matches) => $replacements[$matches[1]]]]></code>
+    </InvalidArgument>
+    <NullArgument>
+      <code><![CDATA[null]]></code>
+    </NullArgument>
+    <UndefinedClass>
+      <code><![CDATA[IVersionManager]]></code>
+      <code><![CDATA[\OCA\Encryption\Util]]></code>
+    </UndefinedClass>
+    <UndefinedInterfaceMethod>
+      <code><![CDATA[putContent]]></code>
+      <code><![CDATA[putContent]]></code>
+    </UndefinedInterfaceMethod>
+  </file>
+  <file src="lib/Helper.php">
+    <InvalidScalarArgument>
+      <code><![CDATA[$time]]></code>
+    </InvalidScalarArgument>
+  </file>
+  <file src="lib/PermissionManager.php">
+    <RedundantCondition>
+      <code><![CDATA[$share && method_exists($share, 'getAttributes')]]></code>
+    </RedundantCondition>
+  </file>
+  <file src="lib/Preview/Office.php">
+    <MissingDependency>
+      <code><![CDATA[Image]]></code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Service/ConnectivityService.php">
+    <UndefinedClass>
+      <code><![CDATA[OutputInterface]]></code>
+      <code><![CDATA[OutputInterface]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Service/FederationService.php">
+    <TypeDoesNotContainType>
+      <code><![CDATA[is_array($trustedList)]]></code>
+    </TypeDoesNotContainType>
+    <UndefinedClass>
+      <code><![CDATA[SharingExternalStorage]]></code>
+    </UndefinedClass>
+    <UndefinedInterfaceMethod>
+      <code><![CDATA[getRemote]]></code>
+      <code><![CDATA[getToken]]></code>
+    </UndefinedInterfaceMethod>
+  </file>
+  <file src="lib/WOPI/Parser.php">
+    <RedundantCondition>
+      <code><![CDATA[$result && count($result) > 0]]></code>
+    </RedundantCondition>
+  </file>
+</files>

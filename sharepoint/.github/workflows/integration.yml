@@ -1,0 +1,92 @@
+# SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: MIT
+
+name: Integration
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/integration.yml'
+      - 'appinfo/**'
+      - 'lib/**'
+      - 'tests/**'
+
+  push:
+    branches:
+      - master
+      - stable*
+
+env:
+  APP_NAME: sharepoint
+
+jobs:
+  sqlite:
+    runs-on: ubuntu-latest
+
+    strategy:
+      # do not stop on another job's failure
+      fail-fast: false
+      matrix:
+        php-versions: ['8.1', '8.2', '8.3']
+        databases: ['sqlite']
+        server-versions: ['master']
+
+    name: integration-php${{ matrix.php-versions }}-${{ matrix.databases }}
+
+    steps:
+      - name: Checkout server
+        uses: actions/checkout@v2
+        with:
+          repository: nextcloud/server
+          ref: ${{ matrix.server-versions }}
+
+      - name: Checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+      - name: Checkout app
+        uses: actions/checkout@v2
+        with:
+          path: apps/${{ env.APP_NAME }}
+
+      - name: Set up php ${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@e6f75134d35752277f093989e72e140eaa222f35 # v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
+          extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, sqlite, pdo_sqlite
+          coverage: none
+          ini-file: development
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install app dependencies
+        working-directory: apps/${{ env.APP_NAME }}
+        run: composer i
+
+      - name: Install test dependencies
+        working-directory: apps/${{ env.APP_NAME }}/tests/Integration
+        run: composer i
+
+      - name: Set up Nextcloud
+        env:
+          DB_PORT: 4444
+        run: |
+          mkdir data
+          ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
+          php -f index.php
+          ./occ app:enable files_external
+          ./occ app:enable --force ${{ env.APP_NAME }}
+          php -S localhost:8080 &
+
+      - name: Execute integration tests
+        working-directory: apps/${{ env.APP_NAME }}/tests/Integration
+        run: |
+          APP_INTEGRATION_DIR=$PWD
+          ROOT_DIR=${APP_INTEGRATION_DIR}/../../../..
+          composer install
+          cp ${ROOT_DIR}/build/integration/features/bootstrap/CommandLine.php ${APP_INTEGRATION_DIR}/features/bootstrap/
+          export TEST_SERVER_URL="http://localhost:8080/"
+          ${APP_INTEGRATION_DIR}/vendor/bin/behat --colors

@@ -1,0 +1,14 @@
+{ "translations": {
+    "Saving…" : "Saving…",
+    "Saved" : "Saved",
+    "Host" : "Host",
+    "Port" : "Port",
+    "Select" : "Select",
+    "Delete file" : "Delete file",
+    "Yes" : "კი",
+    "No" : "არა",
+    "Save" : "Save",
+    "Advanced" : "Advanced",
+    "Description" : "Description"
+},"pluralForm" :"nplurals=2; plural=(n!=1);"
+}

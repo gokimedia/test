@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="6.12.1@e71404b0465be25cf7f8a631b298c01c5ddd864f">
+  <file src="lib/BackgroundJob/RemoteActivity.php">
+    <UndefinedClass>
+      <code><![CDATA[ClientException]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/CurrentUser.php">
+    <NoInterfaceProperties>
+      <code><![CDATA[$this->request->server]]></code>
+    </NoInterfaceProperties>
+  </file>
+  <file src="lib/Data.php">
+    <UndefinedDocblockClass>
+      <code><![CDATA[$favoriteFilter->filterFavorites($query);]]></code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="lib/DigestSender.php">
+    <InvalidArrayOffset>
+      <code><![CDATA[[$user->getEMailAddress() => $user->getDisplayName()]]]></code>
+    </InvalidArrayOffset>
+  </file>
+  <file src="lib/FilesHooks.php">
+    <UndefinedClass>
+      <code><![CDATA[$this->teamManager]]></code>
+      <code><![CDATA[$this->teamManager]]></code>
+      <code><![CDATA[Member]]></code>
+      <code><![CDATA[\OCA\GroupFolders\ACL\RuleManager]]></code>
+      <code><![CDATA[\OCA\GroupFolders\Folder\FolderManager]]></code>
+      <code><![CDATA[protected]]></code>
+    </UndefinedClass>
+    <UndefinedDocblockClass>
+      <code><![CDATA[$rule]]></code>
+      <code><![CDATA[$rule]]></code>
+      <code><![CDATA[$rule]]></code>
+      <code><![CDATA[$rules]]></code>
+    </UndefinedDocblockClass>
+  </file>
+</files>

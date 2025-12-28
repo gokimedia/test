@@ -1,0 +1,38 @@
+{
+	"scripts": {
+		"cs:check": "php-cs-fixer fix --dry-run --diff",
+		"cs:fix": "php-cs-fixer fix",
+		"lint": "find . -name \\*.php -not -path './vendor/*' -not -path './build/*' -print0 | xargs -0 -n1 php -l",
+		"psalm": "psalm --threads=1",
+		"psalm:dev": "psalm --no-cache --threads=$(nproc)",
+		"psalm:update-baseline": "psalm --threads=1 --update-baseline",
+		"psalm:clear": "psalm --clear-cache && psalm --clear-global-cache",
+		"test:unit": "vendor/bin/phpunit -c tests/phpunit.xml --color",
+		"post-install-cmd": [
+			"@composer bin all install --ansi"
+		]
+	},
+	"config": {
+		"optimize-autoloader": true,
+		"classmap-authoritative": true,
+		"platform": {
+			"php": "8.1"
+		},
+		"sort-packages": true,
+		"allow-plugins": {
+			"bamarni/composer-bin-plugin": true
+		}
+	},
+	"require-dev": {
+		"nextcloud/coding-standard": "^1.2.1",
+		"nextcloud/ocp": "dev-master"
+	},
+	"autoload": {
+		"psr-4": {
+			"OCA\\FilesAutomatedTagging\\": "lib/"
+		}
+	},
+	"require": {
+		"bamarni/composer-bin-plugin": "^1.8"
+	}
+}

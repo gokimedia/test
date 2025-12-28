@@ -1,0 +1,89 @@
+<?php
+/**
+ * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+namespace OCA\Files\Event {
+	use OCP\EventDispatcher\Event;
+	class LoadAdditionalScriptsEvent extends Event {
+	}
+}
+
+namespace OC\Core\Command {
+	use Symfony\Component\Console\Command\Command;
+	use Symfony\Component\Console\Input\InputInterface;
+	use Symfony\Component\Console\Output\OutputInterface;
+
+	class Base {
+		public function __construct() {}
+		protected function configure(): void {}
+		public function run(InputInterface $input, OutputInterface $output): int {}
+		public function setName(string $name): self {}
+		public function setDescription(string $description): self {}
+		public function addOption(string $name, $shortcut = null, ?int $mode = null, string $description = '', $default = null): self;
+		public function addArgument(string $name, int $mode = null, string $description = '', $default = null): self;
+		protected function writeArrayInOutputFormat(InputInterface $input, OutputInterface $output, array $items, string $prefix = '  - '): void;
+	}
+}
+
+namespace OC\Group {
+	abstract class Database extends \OCP\Group\Backend\ABackend implements
+		\OCP\Group\Backend\IAddToGroupBackend,
+		\OCP\Group\Backend\ICountDisabledInGroup,
+		\OCP\Group\Backend\ICountUsersBackend,
+		\OCP\Group\Backend\ICreateGroupBackend,
+		\OCP\Group\Backend\IDeleteGroupBackend,
+		\OCP\Group\Backend\IGetDisplayNameBackend,
+		\OCP\Group\Backend\IGroupDetailsBackend,
+		\OCP\Group\Backend\IRemoveFromGroupBackend,
+		\OCP\Group\Backend\ISetDisplayNameBackend,
+		\OCP\Group\Backend\ISearchableGroupBackend,
+		\OCP\Group\Backend\INamedBackend {
+	}
+}
+
+namespace OC\DB\Exceptions {
+	class DbalException extends \OCP\DB\Exception {
+		public function isRetryable(): bool {
+		}
+	}
+}
+
+namespace OCP\Log {
+	public function logger(?string $appId = null): \Psr\Log\LoggerInterface;
+}
+
+namespace OC\Security\CSRF {
+	class CsrfToken {
+		public function getEncryptedValue(): string {
+			return 'token';
+		}
+	}
+	class CsrfTokenManager {
+			abstract public function getToken(): CsrfToken;
+	}
+}
+
+namespace OC\User {
+	class LoginException extends \Exception {
+	}
+}
+
+namespace OCA\DAV\Connector\Sabre {
+	class Auth {
+		public const DAV_AUTHENTICATED = 'AUTHENTICATED_TO_DAV_BACKEND';
+	}
+}
+
+namespace OCA\DAV\Events {
+	use OCP\EventDispatcher\Event;
+	use Sabre\DAV\Server;
+	class SabrePluginAddEvent extends Event {
+		public function getServer(): Server;
+	}
+}
+
+class OC_User {
+	public static function useBackend($userBackend): void;
+	public static function handleApacheAuth(): void;
+}

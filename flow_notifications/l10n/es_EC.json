@@ -1,0 +1,8 @@
+{ "translations": {
+    "Send a notification" : "Enviar una notificación ",
+    "Triggers a notification" : "Triggers una notificación ",
+    "Flow Notifications" : "Notificaciones de Flujo ",
+    "Notification action for Nextcloud Flow" : "Acción de notificación para Nextcloud Flow ",
+    "Choose a notification title (optional)" : "Elegir un título de notificación (opcional)"
+},"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
+}

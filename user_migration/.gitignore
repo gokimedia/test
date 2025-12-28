@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+.idea
+*.iml
+vendor/
+/build/
+node_modules/
+/.php_cs.cache
+js/*hot-update.*
+/.php-cs-fixer.cache
+.phpunit.result.cache

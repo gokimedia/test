@@ -1,0 +1,15 @@
+OC.L10N.register(
+    "files_antivirus",
+    {
+    "Saved" : "បាន​រក្សាទុក",
+    "Host" : "ម៉ាស៊ីន​ផ្ទុក",
+    "Port" : "ច្រក",
+    "TLS" : "TLS",
+    "Select" : "Select",
+    "Yes" : "បាទ ឬចាស",
+    "No" : "ទេ",
+    "Save" : "រក្សាទុក",
+    "Advanced" : "កម្រិត​ខ្ពស់",
+    "Description" : "ការ​អធិប្បាយ"
+},
+"nplurals=1; plural=0;");

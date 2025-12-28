@@ -1,0 +1,23 @@
+build/
+node_modules/
+/vendor/
+/vendor-bin/*/vendor
+
+# Editor directories and files
+.idea/
+
+# Compiled frontend output of vite
+js/*
+css/*
+!css/collectives.css
+
+# PHPunit cache
+.phpunit.result.cache
+
+# PHP-CS-Fixer cache
+.php-cs-fixer.cache
+
+# Cypress test artifacts
+cypress/downloads/
+cypress/screenshots/
+cypress/videos/

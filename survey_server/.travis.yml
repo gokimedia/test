@@ -1,0 +1,44 @@
+language: php
+
+php:
+  - 7.0
+  - 7.1
+  - 7.2
+
+env:
+  global:
+    - CORE_BRANCH=master
+  matrix:
+    - DB=sqlite
+
+branches:
+  only:
+    - master
+    - /^stable\d+(\.\d+)?$/
+
+sudo: true
+before_install:
+  - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+  - bash ./before_install.sh survey_server $CORE_BRANCH $DB
+
+script:
+  # Test lint
+  - cd ../server
+  - cd apps/survey_server
+  - find . -name \*.php -exec php -l "{}" \;
+
+  # Run phpunit tests
+  - cd tests/unit
+  - phpunit --configuration phpunit.xml
+
+  # Create coverage report
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover clover.xml
+
+matrix:
+  include:
+    - php: 7.0
+      env: DB=mysql
+    - php: 7.0
+      env: DB=pgsql
+  fast_finish: true

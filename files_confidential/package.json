@@ -1,0 +1,57 @@
+{
+  "name": "files_confidential",
+  "version": "4.0.0",
+  "description": "",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "build": "NODE_ENV=production vite --mode production build",
+    "postbuild": "build-js/npm-post-build.sh",
+    "dev": "NODE_ENV=development vite --mode development build",
+    "watch": "NODE_ENV=development vite --mode development build --watch",
+    "lint": "eslint --ext .js,.vue src",
+    "lint:fix": "eslint --ext .js,.vue src --fix",
+    "stylelint": "stylelint src/**/*.vue src/**/*.scss src/**/*.css",
+    "stylelint:fix": "stylelint src/**/*.vue src/**/*.scss src/**/*.css --fix"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nextcloud/files_confidential.git"
+  },
+  "author": "Nextcloud GmbH and Nextcloud contributors",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/nextcloud/files_confidential/issues"
+  },
+  "homepage": "https://github.com/nextcloud/files_confidential#readme",
+  "devDependencies": {
+    "@nextcloud/axios": "^2.5.1",
+    "@nextcloud/browserslist-config": "^3.0.1",
+    "@nextcloud/dialogs": "^7.1.0",
+    "@nextcloud/eslint-config": "^8.4.1",
+    "@nextcloud/initial-state": "^3.0.0",
+    "@nextcloud/l10n": "^3.1.0",
+    "@nextcloud/router": "^3.0.1",
+    "@nextcloud/stylelint-config": "^3.0.1",
+    "@nextcloud/vite-config": "^2.5.2",
+    "@nextcloud/vue": "^9.1.0",
+    "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-stylelint": "^6.0.2",
+    "vue": "^3.5.22",
+    "vue-material-design-icons": "^5.3.1"
+  },
+  "engines": {
+    "node": "^24.0.0",
+    "npm": "^11.3.0"
+  },
+  "browserslist": [
+    "extends @nextcloud/browserslist-config"
+  ],
+  "dependencies": {
+    "url-parse": "^1.5.10",
+    "webdav": "^4.11.4"
+  }
+}

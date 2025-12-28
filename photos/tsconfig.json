@@ -1,0 +1,16 @@
+{
+	"extends": "@vue/tsconfig/tsconfig.json",
+	"include": ["./src"],
+	"compilerOptions": {
+		"lib": [
+			"DOM",
+			"ESNext"
+		],
+		"rootDir": "src",
+		"noImplicitAny": false,
+		"allowImportingTsExtensions": true,
+	},
+	"vueCompilerOptions": {
+		"target": 2.7
+	}
+}

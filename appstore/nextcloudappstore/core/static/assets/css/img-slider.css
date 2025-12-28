@@ -1,0 +1,86 @@
+/**
+ * SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+#app-gallery-container {
+    display: flex;
+    overflow-y: auto;
+    min-width: 100%;
+    border-radius: var(--border-radius-large);
+    box-shadow: 0px 8px 30px 0px rgba(0, 116, 178, 0.08);
+}
+
+#app-gallery {
+    min-width: 100%;
+    box-shadow: 0 0 4px #ccc;
+}
+
+#app-gallery .inner-container {
+    position: relative;
+}
+
+.carousel-controls {
+    line-height: 40px;
+    width: 50%;
+    height: 40px;
+    background: none;
+    opacity: 1;
+    position: relative;
+    margin: 0 auto;
+    background-color: var(--color-background-light);
+    border-radius: var(--border-radius-large);
+    user-select: none;
+}
+
+.carousel-control {
+    text-shadow: none;
+    font-weight: 400;
+    position: absolute;
+    top: calc(50% - 1px);;
+    transform: translateY(-50%);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 70px;
+}
+
+.carousel-control.left {
+    left: 0;
+    background-image: linear-gradient(to left,rgba(0,0,0,.01) 0,rgb(255, 249, 249) 100%);
+}
+
+.carousel-control.right {
+    right: 0;
+    background-image: linear-gradient(to right,rgba(0,0,0,.01) 0,rgb(255, 249, 249) 100%);
+}
+
+.carousel-control .icon {
+    width: 36px;
+    height: 36px;
+}
+
+.carousel-indicators {
+    top: 0;
+    line-height: 40px;
+}
+
+.carousel-inner:not(.fullscreen) {
+    cursor: zoom-in;
+}
+
+.fullscreen  {
+    cursor: zoom-out;
+}
+
+.carousel-inner img {
+    min-width: 100%;
+}
+
+@media screen and (max-width: 991px) {
+    span.control-text {
+        display: none !important;
+    }
+}

@@ -1,0 +1,254 @@
+<!--
+  - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<template>
+	<NcSettingsSection :name="t('user_migration', 'Import')"
+		:description="!loading ? t('user_migration', 'Please note that existing data may be overwritten') : ''"
+		:limit-width="false">
+		<template v-if="!loading">
+			<div v-if="status.current === 'import'"
+				class="section__status">
+				<NcButton type="secondary"
+					:aria-label="t('user_migration', 'Show import status')"
+					:disabled="status.current === 'export' || cancellingImport"
+					@click.stop.prevent="openModal">
+					<template #icon>
+						<InformationOutline :size="20" />
+					</template>
+					{{ t('user_migration', 'Show status') }}
+				</NcButton>
+				<NcButton type="tertiary"
+					:aria-label="t('user_migration', 'Cancel import')"
+					:disabled="status.status !== 'waiting' || cancellingImport"
+					@click.stop.prevent="cancelImport">
+					{{ t('user_migration', 'Cancel') }}
+				</NcButton>
+				<span class="settings-hint">{{ status.status === 'waiting' ? t('user_migration', 'Import queued') : t('user_migration', 'Import in progress…') }}</span>
+				<NcLoadingIcon v-if="cancellingImport" class="section__loading" :size="34" />
+			</div>
+			<div v-else class="section__status">
+				<NcButton type="primary"
+					:aria-label="t('user_migration', 'Import your data')"
+					:disabled="status.current === 'export' || startingImport"
+					@click.stop.prevent="pickImportFile">
+					<template #icon>
+						<PackageUp :size="20" />
+					</template>
+					{{ t('user_migration', 'Import') }}
+				</NcButton>
+				<NcLoadingIcon v-if="startingImport" class="section__loading" :size="34" />
+			</div>
+
+			<span class="section__picker-error error">{{ filePickerError }}</span>
+
+			<NcModal v-if="modalOpened"
+				@close="closeModal">
+				<div class="section__modal">
+					<NcEmptyContent :name="modalMessage"
+						:description="modalDescription">
+						<template #icon>
+							<PackageUp />
+						</template>
+						<template #action>
+							<div class="section__modal-action">
+								<NcLoadingIcon v-if="status.status === 'waiting' || status.status === 'started'"
+									class="section__icon"
+									:size="40" />
+								<template v-else>
+									<CheckCircleOutline class="section__icon"
+										:size="40" />
+									<NcButton class="section__modal-button"
+										type="primary"
+										:aria-label="t('user_migration', 'Close import status')"
+										@click.stop.prevent="closeModal">
+										{{ t('user_migration', 'Close') }}
+									</NcButton>
+								</template>
+							</div>
+						</template>
+					</NcEmptyContent>
+				</div>
+			</NcModal>
+		</template>
+		<NcLoadingIcon v-else :size="40" />
+	</NcSettingsSection>
+</template>
+
+<script>
+import { getFilePickerBuilder, FilePickerType } from '@nextcloud/dialogs'
+
+import { NcButton, NcEmptyContent, NcLoadingIcon, NcModal, NcSettingsSection } from '@nextcloud/vue'
+import CheckCircleOutline from 'vue-material-design-icons/CheckCircleOutline.vue'
+import InformationOutline from 'vue-material-design-icons/InformationOutline.vue'
+import PackageUp from 'vue-material-design-icons/PackageUp.vue'
+
+import { queueImportJob, cancelJob } from '../services/migrationService.js'
+import { handleError } from '../shared/utils.js'
+
+/** @type {import('@nextcloud/dialogs').IFilePickerFilter} */
+const filterEntry = (entry) => {
+	if (entry.mime === 'httpd/unix-directory') {
+		return true
+	}
+	return entry.basename.endsWith('.nextcloud_export')
+}
+
+const picker = getFilePickerBuilder(t('user_migration', 'Choose a file to import'))
+	.setMultiSelect(false)
+	.setType(FilePickerType.Choose)
+	.allowDirectories(false)
+	.setFilter(filterEntry)
+	.build()
+
+export default {
+	name: 'ImportSection',
+
+	components: {
+		CheckCircleOutline,
+		InformationOutline,
+		NcButton,
+		NcEmptyContent,
+		NcLoadingIcon,
+		NcModal,
+		NcSettingsSection,
+		PackageUp,
+	},
+
+	props: {
+		notificationsEnabled: {
+			type: Boolean,
+			default: false,
+		},
+		loading: {
+			type: Boolean,
+			default: true,
+		},
+		status: {
+			type: Object,
+			default: () => ({}),
+		},
+	},
+
+	data() {
+		return {
+			modalOpened: false,
+			startingImport: false,
+			cancellingImport: false,
+			filePickerError: null,
+		}
+	},
+
+	computed: {
+		modalMessage() {
+			if (this.status.status === 'waiting') {
+				return t('user_migration', 'Import queued')
+			} else if (this.status.status === 'started') {
+				return t('user_migration', 'Import in progress…')
+			}
+			return t('user_migration', 'Import completed successfully')
+		},
+
+		modalDescription() {
+			if (this.status.status === 'waiting') {
+				if (this.notificationsEnabled) {
+					return t('user_migration', 'You will be notified when your import has completed. This may take a while.')
+				}
+				return t('user_migration', 'This may take a while.')
+			} else if (this.status.status === 'started') {
+				return t('user_migration', 'Please do not use your account while importing.')
+			}
+			return ''
+		},
+	},
+
+	methods: {
+		async pickImportFile() {
+			this.filePickerError = null
+
+			try {
+				const filePath = await picker.pick()
+
+				this.logger.debug(`Path "${filePath}" selected for import`)
+				if (!filePath.startsWith('/')) {
+					throw new Error(`Invalid path: ${filePath}`)
+				}
+
+				try {
+					this.startingImport = true
+					await queueImportJob(filePath)
+					this.$emit('refresh-status', () => {
+						this.openModal()
+						this.startingImport = false
+					})
+				} catch (error) {
+					this.startingImport = false
+					handleError(error)
+				}
+			} catch (error) {
+				const errorMessage = error.message || 'Unknown error'
+				this.logger.error(`Error selecting file to import: ${errorMessage}`, { error })
+				this.filePickerError = errorMessage
+			}
+		},
+
+		async cancelImport() {
+			try {
+				this.cancellingImport = true
+				await cancelJob()
+				this.$emit('refresh-status', () => {
+					this.cancellingImport = false
+				})
+			} catch (error) {
+				this.cancellingImport = false
+				handleError(error)
+			}
+		},
+
+		openModal() {
+			this.modalOpened = true
+		},
+
+		closeModal() {
+			this.modalOpened = false
+		},
+	},
+}
+</script>
+
+<style lang="scss" scoped>
+.section__status {
+	display: flex;
+	gap: 0 14px;
+	margin-top: 20px;
+
+	.section__loading {
+		margin-left: 6px;
+	}
+
+	.settings-hint {
+		margin: auto 0;
+	}
+}
+
+.section__picker-error {
+	display: inline-block;
+	margin: 20px 0;
+}
+
+.section__modal {
+	.section__icon {
+		height: 40px;
+	}
+
+	.section__modal-action {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.section__modal-button {
+		margin: 20px auto 0 auto;
+	}
+}
+</style>

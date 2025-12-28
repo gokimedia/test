@@ -1,0 +1,125 @@
+/**
+ * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+.notifications-button {
+	.notifications-button__icon {
+		height: 20px;
+	}
+
+	.notification__dot {
+		fill: #ff4402;
+		&--warning {
+			fill: var(--color-warning);
+		}
+		&--white {
+			fill: var(--color-primary-text);
+		}
+	}
+
+	&.hasNotifications {
+		animation-name: pulse;
+		animation-duration: 1600ms;
+		animation-iteration-count: 4;
+
+		svg {
+			opacity: 1;
+		}
+	}
+}
+
+svg {
+	@keyframes pulse {
+		0% {
+			opacity: 1;
+		}
+
+		60% {
+			opacity: .85;
+		}
+
+		100% {
+			opacity: 1;
+		}
+	}
+}
+
+.notification {
+	padding-bottom: 12px;
+
+	&:not(:last-child) {
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.notification-heading {
+		display: flex;
+		align-items: center; // Else children will stretch in height as container is absolutely-positioned.
+		min-height: 26px;
+
+		.notification-time {
+			color: var(--color-text-maxcontrast);
+			margin-block: 13px;
+			margin-inline-start: auto;
+		}
+
+		.notification-dismiss-button {
+			margin: 6px;
+		}
+	}
+
+	.notification-subject,
+	.notification-message,
+	.notification-full-message,
+	.notification-actions {
+		margin-block: 0 12px;
+		margin-inline: 12px;
+	}
+
+	.notification-subject {
+		display: flex;
+		align-items: center;
+
+		& > .image {
+			align-self: flex-start;
+		}
+
+		& > span.subject,
+		& > a > span.subject,
+		& > .rich-text--wrapper,
+		& > a > .rich-text--wrapper {
+			padding-inline-start: 10px;
+			word-wrap: anywhere;
+		}
+	}
+
+	.notification-message,
+	.notification-full-message {
+		padding-inline-start: 42px; // 32px icon + 10px title padding
+		color: var(--color-text-maxcontrast);
+
+		& > .collapsed {
+			overflow: hidden;
+			max-height: 70px;
+		}
+
+		& > .notification-overflow {
+			box-shadow: 0 0 20px 20px var(--color-main-background);
+			position: relative;
+		}
+	}
+
+	strong {
+		font-weight: bold;
+		opacity: 1;
+	}
+
+	.notification-actions {
+		overflow: hidden;
+
+		.button-vue {
+			line-height: normal;
+			margin: 2px 8px;
+		}
+	}
+}

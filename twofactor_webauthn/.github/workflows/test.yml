@@ -1,0 +1,258 @@
+# SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: MIT
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - stable*
+
+jobs:
+  node-version:
+    runs-on: ubuntu-latest
+    outputs:
+      node-version: ${{ steps.versions.outputs.nodeVersion }}
+      npm-version: ${{ steps.versions.outputs.npmVersion }}
+    steps:
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
+      - name: Read package.json node and npm engines version
+        uses: skjnldsv/read-package-engines-version-actions@8205673bab74a63eb9b8093402fd9e0e018663a1 # v2.2
+        id: versions
+        with:
+          fallbackNode: '^22.0.0'
+          fallbackNpm: '^10.5.0'
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['8.1', '8.2', '8.3', '8.4']
+        nextcloud-version: ['master', 'stable32', 'stable31', 'stable30']
+        exclude:
+          - php-version: '8.4'
+            nextcloud-version: 'stable30'
+          - php-version: '8.1'
+            nextcloud-version: 'master'
+    name: Nextcloud ${{ matrix.nextcloud-version }} php${{ matrix.php-version }} unit tests
+    steps:
+    - name: Set up Nextcloud env
+      uses: ChristophWurst/setup-nextcloud@fc0790385c175d97e88a7cb0933490de6e990374 # v0.3.2
+      with:
+        nextcloud-version: ${{ matrix.nextcloud-version }}
+        php-version: ${{ matrix.php-version }}
+        php-coverage: 'xdebug'
+        node-version: 'false'
+        install: true
+    - name: Checkout app
+      uses: actions/checkout@master
+      with:
+        path: nextcloud/apps/twofactor_webauthn
+    - name: Install dependencies
+      working-directory: nextcloud/apps/twofactor_webauthn
+      run: composer install
+    - name: Run tests
+      working-directory: nextcloud/apps/twofactor_webauthn
+      run: composer run test:unit
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: [ '8.4' ]
+        nextcloud-version: [ 'master' ]
+        db: [ 'sqlite' ]
+        include:
+          - php-version: '8.2'
+            nextcloud-version: master
+            db: 'oci'
+          - php-version: '8.1'
+            nextcloud-version: stable32
+            db: 'pgsql'
+          - php-version: '8.3'
+            nextcloud-version: stable31
+            db: 'mysql'
+          - php-version: '8.2'
+            nextcloud-version: stable30
+            db: 'mysql'
+    name: Nextcloud ${{ matrix.nextcloud-version }} php${{ matrix.php-version }}-${{ matrix.db }} integration tests
+    services:
+      mysql-service:
+        image: mariadb:10.11
+        env:
+          MYSQL_ROOT_PASSWORD: my-secret-pw
+          MYSQL_DATABASE: nextcloud
+          MYSQL_USER: nextcloud
+          MYSQL_PASSWORD: nextcloud
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+      postgres-service:
+        image: postgres
+        env:
+          POSTGRES_USER: nextcloud
+          POSTGRES_DB: nextcloud
+          POSTGRES_PASSWORD: nextcloud
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      oracle:
+        image: ghcr.io/gvenzl/oracle-xe:11
+        env:
+          ORACLE_RANDOM_PASSWORD: true
+          APP_USER: autotest
+          APP_USER_PASSWORD: owncloud
+        ports:
+          - 1521:1521/tcp
+    steps:
+      - name: Set up php${{ matrix.php-version }}
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: ctype,curl,dom,gd,iconv,intl,json,mbstring,openssl,posix,sqlite,xml,zip,gmp,oci8
+          coverage: xdebug
+      - name: Checkout Nextcloud
+        run: git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b ${{ matrix.nextcloud-version }} nextcloud
+      - name: Check out the app
+        uses: actions/checkout@master
+        with:
+          path: nextcloud/apps/twofactor_webauthn
+      - name: Install Nextcloud
+        if: ${{ matrix.db != 'oci' }}
+        run: php -f nextcloud/occ maintenance:install --database ${{ matrix.db }} --database-host 127.0.0.1 --database-name nextcloud --database-user nextcloud --database-pass nextcloud --admin-user admin --admin-pass admin
+      - name: Install Nextcloud
+        if: ${{ matrix.db == 'oci' }}
+        run: php -f nextcloud/occ maintenance:install --database ${{ matrix.db }} --database-host=127.0.0.1 --database-name=XE --database-port=1521 --database-user=autotest --database-pass=owncloud --admin-user admin --admin-pass admin
+      - name: Install dependencies
+        working-directory: nextcloud/apps/twofactor_webauthn
+        run: composer install
+      - name: Install the app
+        run: php -f nextcloud/occ app:enable twofactor_webauthn
+      - name: Configure Nextcloud for testing
+        run: |
+          php -f nextcloud/occ config:system:set debug --type bool --value true
+      - name: Run tests
+        working-directory: nextcloud/apps/twofactor_webauthn
+        run: composer run test:integration
+        env:
+          XDEBUG_MODE: coverage
+
+  frontend-unit-test:
+      runs-on: ubuntu-latest
+      name: Front-end unit tests
+      needs: node-version
+      steps:
+          - uses: actions/checkout@master
+          - name: Set up Node ${{ needs.node-version.outputs.node-version }}
+            uses: actions/setup-node@f1f314fca9dfce2769ece7d933488f076716723e # v1
+            with:
+                node-version: ${{ needs.node-version.outputs.node-version }}
+          - name: Set up NPM ${{ needs.node-version.outputs.npm-version }}
+            run: npm install -g npm@${{ needs.node-version.outputs.npm-version }}
+          - name: npm install
+            run: npm install
+          - name: run tests
+            run: npm run test:unit
+      env:
+          CI: true
+
+  frontend-e2e-tests:
+    runs-on: ubuntu-latest
+    name: Front-end E2E tests
+    needs: node-version
+    strategy:
+      matrix:
+        php-version: [ '8.1', '8.2', '8.3', '8.4' ]
+        nextcloud-version: [ 'master', 'stable32', 'stable31', 'stable30' ]
+        exclude:
+          - php-version: '8.4'
+            nextcloud-version: 'stable30'
+          - php-version: '8.1'
+            nextcloud-version: 'master'
+    steps:
+      - name: Set up Nextcloud env
+        uses: ChristophWurst/setup-nextcloud@fc0790385c175d97e88a7cb0933490de6e990374 # v0.3.2
+        with:
+          nextcloud-version: ${{ matrix.nextcloud-version }}
+          php-version: ${{ matrix.php-version }}
+          node-version: ${{ needs.node-version.outputs.node-version }}
+          install: true
+      - name: Configure Nextcloud for testing
+        run: |
+          php -f nextcloud/occ config:system:set debug --type=bool --value=true
+          php -f nextcloud/occ config:system:set overwriteprotocol --value=https
+          php -f nextcloud/occ config:system:set overwritehost --value=localhost
+          php -f nextcloud/occ config:system:set overwrite.cli.url --value=https://localhost
+      - name: Check out the app
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+        with:
+          path: nextcloud/apps/twofactor_webauthn
+      - name: Install php dependencies
+        working-directory: nextcloud/apps/twofactor_webauthn
+        run: composer install
+      - name: Install the app
+        run: php -f nextcloud/occ app:enable twofactor_webauthn
+      - name: Set up node ${{ needs.node-version.outputs.node-version }}
+        uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3
+        with:
+          node-version: ${{ needs.node-version.outputs.node-version }}
+      - name: Set up NPM ${{ needs.node-version.outputs.npm-version }}
+        run: npm install -g npm@${{ needs.node-version.outputs.npm-version }}
+      - name: Install npm dependencies
+        working-directory: nextcloud/apps/twofactor_webauthn
+        run: npm ci
+      - name: Build frontend
+        working-directory: nextcloud/apps/twofactor_webauthn
+        run: npm run dev
+      - name: Install stunnel (tiny https proxy)
+        run: sudo apt-get update && sudo apt-get install -y stunnel
+      - name: Start php server and https proxy
+        working-directory: nextcloud
+        run: |
+          openssl req -new -x509 -days 365 -nodes -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost" -out stunnel.pem -keyout stunnel.pem
+          php -S 127.0.0.1:8080 &
+          sudo stunnel3 -p stunnel.pem -d 443 -r 8080
+      - name: Test https access
+        run: curl --insecure -Li https://localhost
+      - name: Install Playwright browsers
+        working-directory: nextcloud/apps/twofactor_webauthn
+        run: npx playwright install --with-deps chromium
+      - name: Run Playwright tests
+        working-directory: nextcloud/apps/twofactor_webauthn
+        run: DEBUG=pw:api npx playwright test
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: playwright-report-${{ github.event.number }}-nc${{ matrix.nextcloud-version }}-php${{ matrix.php-version }}
+          path: nextcloud/apps/twofactor_webauthn/playwright-report/
+          retention-days: 14
+      - name: Print server logs
+        if: always()
+        run: cat nextcloud/data/nextcloud.log*
+    env:
+      CI: true
+
+  summary:
+    runs-on: ubuntu-latest-low
+    needs:
+      - unit-tests
+      - integration-tests
+      - frontend-unit-test
+      - frontend-e2e-tests
+
+    if: always()
+
+    name: test-summary
+
+    steps:
+      - name: Summary status
+        run: if ${{ needs.unit-tests.result != 'success' || needs.integration-tests.result != 'success' || needs.frontend-unit-test.result != 'success' || needs.frontend-e2e-tests.result != 'success' }}; then exit 1; fi

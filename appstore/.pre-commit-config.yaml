@@ -1,0 +1,94 @@
+# SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: MIT
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+    -   id: check-toml
+    -   id: check-yaml
+        exclude: nextcloudappstore/scaffolding/app-templates/.*
+    -   id: end-of-file-fixer
+        exclude: |
+          (?x)^(
+            \.tx/.*|
+            \.idea/.*|
+            LICENSES/.*|
+            locale/.*|
+            nextcloudappstore/core/static/.*|
+            nextcloudappstore/core/templates/.*|
+            nextcloudappstore/templates/.*|
+            nextcloudappstore/user/templates/.*
+          )$
+    -   id: trailing-whitespace
+        exclude: |
+          (?x)^(
+            \.tx/.*|
+            \.idea/.*|
+            LICENSES/.*|
+            locale/.*|
+            nextcloudappstore/core/static/.*|
+            nextcloudappstore/core/templates/.*|
+            nextcloudappstore/templates/.*|
+            nextcloudappstore/user/templates/.*
+          )$
+    -   id: mixed-line-ending
+        exclude: |
+          (?x)^(
+            \.tx/.*|
+            \.idea/.*|
+            LICENSES/.*|
+            locale/.*|
+            nextcloudappstore/core/static/.*|
+            nextcloudappstore/core/templates/.*|
+            nextcloudappstore/templates/.*|
+            nextcloudappstore/user/templates/.*
+          )$
+
+-   repo: https://github.com/PyCQA/isort
+    rev: 7.0.0
+    hooks:
+    -   id: isort
+
+-   repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 25.12.0
+    hooks:
+    -   id: black
+        exclude: nextcloudappstore/core/migrations
+
+-   repo: https://github.com/tox-dev/pyproject-fmt
+    rev: v2.11.1
+    hooks:
+    -   id: pyproject-fmt
+
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.8
+    hooks:
+    -   id: ruff
+
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.19.0
+    hooks:
+     -  id: mypy
+        files: nextcloudappstore/(api/v1/release|certificate)/
+        additional_dependencies: [types-pyOpenSSL, types-requests, types-Markdown, types-bleach]
+        args:
+          - --ignore-missing-imports
+
+-   repo: https://github.com/PyCQA/flake8
+    rev: 7.3.0
+    hooks:
+    -   id: flake8
+        files: nextcloudappstore
+        exclude: nextcloudappstore/core/migrations
+        types: [file, python]
+        args:
+        - --max-line-length=120
+        - --ignore=E203,W503
+        - --per-file-ignores=__init__.py:F401,F403
+
+-   repo: https://github.com/PyCQA/bandit
+    rev: 1.9.2
+    hooks:
+    -   id: bandit
+        files: nextcloudappstore
+        args: [-r, -c, .bandit.yml]

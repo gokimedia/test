@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+/build
+/node_modules
+
+/nbproject/private/
+tests/.phpunit.result.cache
+/vendor
+/vendor-bin/*/vendor
+composer.phar
+
+/.php_cs.cache
+/.php-cs-fixer.cache

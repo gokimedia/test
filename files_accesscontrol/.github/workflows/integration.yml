@@ -1,0 +1,151 @@
+# SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: MIT
+name: Integration tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+      - stable*
+
+permissions:
+  contents: read
+
+env:
+  APP_NAME: files_accesscontrol
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['8.4']
+        databases: ['sqlite', 'mysql', 'pgsql']
+        server-versions: ['master']
+        richdocuments-versions: ['main']
+        primary-storage: ['local', 'minio']
+
+    name: php${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.server-versions }}-${{ matrix.primary-storage}}
+
+    services:
+      minio:
+        env:
+          MINIO_ACCESS_KEY: minio
+          MINIO_SECRET_KEY: minio123
+        image: ghcr.io/nextcloud/continuous-integration-minio:latest # zizmor: ignore[unpinned-images]
+        ports:
+          - "9000:9000"
+      postgres:
+        image: ghcr.io/nextcloud/continuous-integration-postgres-17:latest # zizmor: ignore[unpinned-images]
+        ports:
+          - 4445:5432/tcp
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: rootpassword
+          POSTGRES_DB: nextcloud
+        options: --health-cmd pg_isready --health-interval 5s --health-timeout 2s --health-retries 5
+      mysql:
+        image: ghcr.io/nextcloud/continuous-integration-mariadb-11.4:latest # zizmor: ignore[unpinned-images]
+        ports:
+          - 4444:3306/tcp
+        env:
+          MARIADB_ROOT_PASSWORD: rootpassword
+        options: --health-cmd="mariadb-admin ping" --health-interval 5s --health-timeout 2s --health-retries 5
+
+    steps:
+      - name: Checkout server
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+          submodules: recursive
+          repository: nextcloud/server
+          ref: ${{ matrix.server-versions }}
+
+      - name: Checkout app
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+          path: apps/${{ env.APP_NAME }}
+
+      - name: Checkout app (richdocuments)
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+          path: apps/richdocuments
+          repository: nextcloud/richdocuments
+          ref: ${{ matrix.richdocuments-versions }}
+
+      - name: Set up php ${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
+        with:
+          php-version: ${{ matrix.php-versions }}
+          # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
+          extensions: apcu, bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, sqlite, pdo_sqlite, mysql, pdo_mysql, pgsql, pdo_pgsql
+          coverage: none
+          ini-file: development
+          # Temporary workaround for missing pcntl_* in PHP 8.3: ini-values: apc.enable_cli=on
+          ini-values: apc.enable_cli=on, disable_functions=
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up dependencies
+        working-directory: apps/${{ env.APP_NAME }}
+        run: composer i --no-dev
+
+      - name: Set up behat dependencies
+        working-directory: apps/${{ env.APP_NAME }}/tests/Integration
+        run: composer i
+
+      - name: Set up dependencies (richdocuments)
+        working-directory: apps/richdocuments
+        run: composer i --no-dev
+
+      - name: Set up Nextcloud for S3 primary storage
+        if: matrix.primary-storage == 'minio'
+        run: |
+          echo '<?php $CONFIG=["${{ matrix.key }}" => ["class" => "OC\Files\ObjectStore\S3", "arguments" => ["bucket" => "nextcloud", "autocreate" => true, "key" => "minio", "secret" => "minio123", "hostname" => "localhost", "port" => 9000, "use_ssl" => false, "use_path_style" => true, "uploadPartSize" => 52428800]]];' > config/config.php
+
+      - name: Set up Nextcloud
+        run: |
+          if [ "${{ matrix.databases }}" = "mysql" ]; then
+            export DB_PORT=4444
+          elif [ "${{ matrix.databases }}" = "pgsql" ]; then
+            export DB_PORT=4445
+          fi
+          mkdir data
+          ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
+          ./occ config:system:set hashing_default_password --value=true --type=boolean
+          ./occ config:system:set memcache.local --value="\\OC\\Memcache\\APCu"
+          ./occ config:system:set memcache.distributed --value="\\OC\\Memcache\\APCu"
+          cat config/config.php
+          ./occ user:list
+          ./occ app:enable --force ${{ env.APP_NAME }}
+          ./occ config:system:set query_log_file --value '/home/runner/work/${{ env.APP_NAME }}/${{ env.APP_NAME }}/query.log'
+          php -S localhost:8080 &
+
+      - name: Run behat
+        working-directory: apps/${{ env.APP_NAME }}/tests/Integration
+        run: ./run.sh
+
+      - name: Print logs
+        if: always()
+        run: |
+          cat data/nextcloud.log
+
+  summary:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest-low
+    needs: [integration]
+
+    if: always()
+
+    name: integration-summary
+
+    steps:
+      - name: Summary status
+        run: if ${{ needs.integration.result != 'success' }}; then exit 1; fi

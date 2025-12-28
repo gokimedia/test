@@ -1,0 +1,59 @@
+/*!
+ * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+.comment-form form {
+	display: flex;
+	flex-grow: 1;
+	position: relative;
+
+	.editor__content:deep {
+		flex-grow: 1;
+		margin-left: var(--default-clickable-area);
+
+		.ProseMirror {
+			width: 100%;
+		}
+	}
+
+	input[type='submit'] {
+		width: var(--default-clickable-area);
+		height: var(--default-clickable-area);
+		margin: 0;
+		padding: 13px;
+		background-color: transparent;
+		border: none;
+		position: absolute;
+		bottom: var(--default-grid-baseline);
+		right: var(--default-grid-baseline);
+
+		&:disabled {
+			opacity: .7;
+		}
+	}
+}
+
+.comment {
+	margin-bottom: 10px;
+}
+
+.comment--header {
+	display: flex;
+	align-items: center;
+	color: var(--color-text-light);
+
+	.username {
+		padding: 10px;
+	}
+	.spacer {
+		flex-grow: 1;
+	}
+	.timestamp {
+		color: var(--color-text-maxcontrast);
+	}
+}
+
+.comment--content {
+	margin-left: var(--default-clickable-area);
+	word-break: break-word;
+}

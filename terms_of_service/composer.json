@@ -1,0 +1,47 @@
+{
+	"autoload": {
+		"exclude-from-classmap": [
+			"**/bamarni/composer-bin-plugin/**"
+		],
+		"psr-4": {
+			"OCA\\TermsOfService\\": "lib/"
+		}
+	},
+	"config": {
+		"allow-plugins": {
+			"bamarni/composer-bin-plugin": true
+		},
+		"autoloader-suffix": "TermsOfService",
+		"optimize-autoloader": true,
+		"platform": {
+			"php": "8.1"
+		},
+		"sort-packages": true
+	},
+	"require": {
+		"erusev/parsedown": "^1.6",
+		"geoip2/geoip2": "~3.3"
+	},
+	"require-dev": {
+		"bamarni/composer-bin-plugin": "^1.8",
+		"roave/security-advisories": "dev-latest"
+	},
+	"scripts": {
+		"bin": "echo 'bin not installed'",
+		"lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
+		"cs:check": "php-cs-fixer fix --dry-run --diff",
+		"cs:fix": "php-cs-fixer fix",
+		"openapi": "generate-spec --verbose",
+		"rector": "rector && composer cs:fix",
+		"post-install-cmd": [
+			"@composer bin all install --ansi",
+			"composer dump-autoload"
+		],
+		"post-update-cmd": [
+			"@composer bin all update --ansi",
+			"composer dump-autoload"
+		],
+		"psalm": "psalm --no-cache --threads=$(nproc)",
+		"test:unit": "vendor/bin/phpunit --color -c tests/phpunit.xml"
+	}
+}

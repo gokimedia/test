@@ -1,0 +1,145 @@
+<?php
+
+declare(strict_types=1);
+/**
+ * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+use OCP\UserMigration\IMigrator as IUserMigrator;
+
+class OC {
+	/**
+	 * @var \OCP\IServerContainer
+	 */
+	public static $server;
+}
+
+class OC_App {
+	public static function getAppVersions();
+}
+
+namespace OC\Archive {
+	abstract class Archive {
+		abstract public function __construct(string $source);
+		abstract public function addFolder(string $path): bool;
+		abstract public function addFile(string $path, string $source = ''): bool;
+		abstract public function rename(string $source, string $dest): bool;
+		/**
+		* @return int|false
+		*/
+		abstract public function filesize(string $path);
+		/**
+		* @return int|false
+		*/
+		abstract public function mtime(string $path);
+		abstract public function getFolder(string $path): array;
+		abstract public function getFiles(): array;
+		/**
+		* @return string|false
+		*/
+		abstract public function getFile(string $path);
+		abstract public function extractFile(string $path, string $dest): bool;
+		abstract public function extract(string $dest): bool;
+		abstract public function fileExists(string $path): bool;
+		abstract public function remove(string $path): bool;
+		/**
+		* @return false|resource
+		*/
+		abstract public function getStream(string $path, string $mode);
+	}
+	class ZIP extends Archive
+	{
+		public function __construct(string $source);
+		public function getStat(string $path): ?array;
+	}
+}
+
+namespace OC\AppFramework\Bootstrap {
+	class Coordinator {
+		public function getRegistrationContext(): ?RegistrationContext {}
+	}
+
+	class RegistrationContext {
+		/**
+		* @return ServiceRegistration<IUserMigrator>[]
+		*/
+		public function getUserMigrators(): array {}
+	}
+
+	/**
+	* @psalm-immutable
+	* @template T
+	*/
+	class ServiceRegistration extends ARegistration {
+		/**
+		* @psalm-return class-string<T>
+		*/
+		public function getService(): string {}
+	}
+
+	/**
+	* @psalm-immutable
+	*/
+	abstract class ARegistration {
+		public function getAppId(): string {}
+	}
+}
+
+namespace OCA\Files\AppInfo {
+	class Application {
+		public const APP_ID = 'files';
+	}
+}
+
+namespace OCA\Files_Versions {
+	class Storage {
+		public const VERSIONS_ROOT = 'files_versions/';
+	}
+}
+
+namespace OC\Hooks {
+	interface Emitter {
+	}
+}
+
+namespace OC\Cache {
+	use OCP\ICache;
+
+	class CappedMemoryCache implements ICache, \ArrayAccess {
+		public function __construct($capacity = 512);
+		public function hasKey($key): bool {}
+		public function get($key) {}
+		public function set($key, $value, $ttl = 0): bool {}
+		public function remove($key) {}
+		public function clear($prefix = '') {}
+		public function offsetExists($offset): bool {}
+		public function &offsetGet($offset) {}
+		public function offsetSet($offset, $value): void {}
+		public function offsetUnset($offset): void {}
+		public function getData() {}
+		public static function isAvailable(): bool {}
+	}
+}
+
+namespace OC\Core\Command {
+	use Symfony\Component\Console\Input\InputInterface;
+	use Symfony\Component\Console\Output\OutputInterface;
+	use Symfony\Component\Console\Command\Command;
+
+	class Base extends Command {
+		public const OUTPUT_FORMAT_PLAIN = 'plain';
+		public const OUTPUT_FORMAT_JSON = 'json';
+		public const OUTPUT_FORMAT_JSON_PRETTY = 'json_pretty';
+
+		protected string $defaultOutputFormat = static::OUTPUT_FORMAT_PLAIN;
+
+		public function __construct() {}
+		protected function configure() {}
+		public function run(InputInterface $input, OutputInterface $output) {}
+		public function setName(string $name) {}
+		public function getHelper(string $name) {}
+		protected function writeArrayInOutputFormat(InputInterface $input, OutputInterface $output, array $items, string $prefix = '  - ') {}
+		protected function writeTableInOutputFormat(InputInterface $input, OutputInterface $output, array $items): void {}
+	}
+}

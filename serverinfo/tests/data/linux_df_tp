@@ -1,0 +1,14 @@
+Filesystem                              Type     1024-blocks      Used Available Capacity Mounted on
+udev                                    devtmpfs     4052408         0   4052408       0% /dev
+tmpfs                                   tmpfs         816800      7592    809208       1% /run
+/dev/mapper/homestead--vg-root          ext4        56422560   6205468  47321220      12% /
+tmpfs                                   tmpfs        4084000         8   4083992       1% /dev/shm
+tmpfs                                   tmpfs           5120         0      5120       0% /run/lock
+tmpfs                                   tmpfs        4084000         0   4084000       0% /sys/fs/cgroup
+/dev/mapper/homestead--vg-mysql--master ext4        65531436    257212  61902400       1% /homestead-vg/master
+vagrant                                 vboxsf     958123168 614831132 343292036      65% /vagrant
+home_vagrant_code                       vboxsf     958123168 614831132 343292036      65% /home/vagrant/code
+tmpfs                                   tmpfs         816800         0    816800       0% /run/user/1000
+nfs.example.com:/export                 nfs4           14820         0      1230       0% /nfs
+198.51.100.42:/storage                  fuse.sshfs  47929956     53116  45419052       1% /mnt/sshfs
+/dev/vda5                               ext4       205314024 110088996  84722884      57% /nextcloud/my.cloud.domain.xx

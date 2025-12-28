@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="6.5.0@38fc8444edf0cebc9205296ee6e30e906ade783b">
+  <file src="lib/Activity/Filter.php">
+    <MethodSignatureMismatch>
+      <code><![CDATA[$types]]></code>
+    </MethodSignatureMismatch>
+  </file>
+  <file src="lib/Controller/BoardApiController.php">
+    <UndefinedFunction>
+      <code><![CDATA[parseDate($modified)]]></code>
+    </UndefinedFunction>
+  </file>
+  <file src="lib/Controller/PageController.php">
+    <UndefinedClass>
+      <code><![CDATA[LoadSidebar]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Controller/StackApiController.php">
+    <UndefinedFunction>
+      <code><![CDATA[parseDate($modified)]]></code>
+    </UndefinedFunction>
+  </file>
+  <file src="lib/DAV/Calendar.php">
+    <UndefinedClass>
+      <code><![CDATA[ExternalCalendar]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/DAV/CalendarObject.php">
+    <UndefinedClass>
+      <code><![CDATA[ICalendarObject]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/DAV/CalendarPlugin.php">
+    <UndefinedClass>
+      <code><![CDATA[ICalendarProvider]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/DAV/DeckCalendarBackend.php">
+    <UndefinedClass>
+      <code><![CDATA[NotFound]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Db/Card.php">
+    <UndefinedClass>
+      <code><![CDATA[VCalendar]]></code>
+      <code><![CDATA[VCalendar]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Db/Stack.php">
+    <UndefinedClass>
+      <code><![CDATA[VCalendar]]></code>
+      <code><![CDATA[VCalendar]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Service/FileService.php">
+    <RedundantCondition>
+      <code><![CDATA[is_resource($content)]]></code>
+      <code><![CDATA[is_resource($content)]]></code>
+    </RedundantCondition>
+  </file>
+  <file src="lib/Service/Importer/BoardImportCommandService.php">
+    <UndefinedInterfaceMethod>
+      <code><![CDATA[ask]]></code>
+      <code><![CDATA[ask]]></code>
+      <code><![CDATA[ask]]></code>
+    </UndefinedInterfaceMethod>
+  </file>
+  <file src="lib/Service/Importer/Systems/TrelloJsonService.php">
+    <InvalidPropertyFetch>
+      <code><![CDATA[$createCardDate->date]]></code>
+    </InvalidPropertyFetch>
+  </file>
+  <file src="lib/Teams/DeckTeamResourceProvider.php">
+    <FalsableReturnStatement>
+      <code><![CDATA[file_get_contents(__DIR__ . '/../../img/deck-current.svg')]]></code>
+    </FalsableReturnStatement>
+  </file>
+</files>

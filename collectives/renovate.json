@@ -1,0 +1,64 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "timezone": "Europe/Berlin",
+  "schedule": [
+    "before 5am every weekday",
+    "every weekend"
+  ],
+  "reviewers": [
+    "max-nextcloud",
+    "mejo-"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "rangeStrategy": "bump",
+  "rebaseWhen": "conflicted",
+  "ignoreUnstable": false,
+  "baseBranchPatterns": [
+    "main"
+  ],
+  "enabledManagers": [
+    "npm"
+  ],
+  "ignoreDeps": [
+    "node",
+    "npm"
+  ],
+  "packageRules": [
+    {
+      "groupName": "cypress",
+      "matchPackageNames": [
+        "cypress",
+        "@nextcloud/e2e-test-server"
+      ]
+    },
+    {
+      "matchPackageNames": [
+        "pinia"
+      ],
+      "allowedVersions": "<3"
+    },
+    {
+      "matchPackageNames": [
+        "vue"
+      ],
+      "allowedVersions": "<3"
+    },
+    {
+      "matchPackageNames": [
+        "vue-router"
+      ],
+      "allowedVersions": "<4"
+    },
+    {
+      "matchPackageNames": [
+        "vueuse"
+      ],
+      "allowedVersions": "<12"
+    }
+  ]
+}

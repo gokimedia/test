@@ -1,0 +1,37 @@
+{
+	"config": {
+		"platform": {
+			"php": "8.0"
+		},
+		"sort-packages": true,
+		"optimize-autoloader": true,
+		"classmap-authoritative": true,
+		"autoloader-suffix": "CalendarResourceManagement",
+		"allow-plugins": {
+			"bamarni/composer-bin-plugin": true
+		}
+	},
+	"autoload": {
+		"psr-4": {
+			"OCA\\CalendarResourceManagement\\": "lib/"
+		}
+	},
+	"require": {
+		"php": ">=8.0 <=8.3",
+		"bamarni/composer-bin-plugin": "^1.8.3"
+	},
+	"require-dev": {
+		"nextcloud/coding-standard": "^1.4.0",
+		"psalm/phar": "^5.26.1",
+		"roave/security-advisories": "dev-master"
+	},
+	"scripts": {
+		"post-install-cmd": [
+			"@composer bin phpunit install --ansi"
+		],
+		"cs:check": "php-cs-fixer fix --dry-run --diff",
+		"cs:fix": "php-cs-fixer fix",
+		"lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;",
+		"test:unit": "phpunit -c tests/phpunit.xml"
+	}
+}

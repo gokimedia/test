@@ -1,0 +1,67 @@
+# SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+version: 2
+updates:
+- package-ecosystem: composer
+  directories:
+  - /
+  - /vendor-bin/cs-fixer
+  - /vendor-bin/phpunit
+  - /vendor-bin/psalm
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  open-pull-requests-limit: 10
+  labels:
+    - 3. to review
+    - dependencies
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  open-pull-requests-limit: 10
+  labels:
+    - 3. to review
+    - dependencies
+
+# stable31
+- package-ecosystem: composer
+  target-branch: stable31
+  directories:
+  - /
+  - /vendor-bin/cs-fixer
+  - /vendor-bin/phpunit
+  - /vendor-bin/psalm
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  open-pull-requests-limit: 10
+  labels:
+    - 3. to review
+    - dependencies
+  ignore:
+    # do not do breaking changes on stable branches
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major"]
+- package-ecosystem: npm
+  target-branch: stable31
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  labels:
+    - 3. to review
+    - dependencies
+  ignore:
+    # do not do breaking changes on stable branches
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major"]

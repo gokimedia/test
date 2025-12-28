@@ -1,0 +1,25 @@
+{% extends "user/base.html" %}
+{% load i18n %}
+{% load account socialaccount css_class %}
+
+{# SPDX-FileCopyrightText: 2017 Nextcloud GmbH and Nextcloud contributors #}
+{# SPDX-License-Identifier: AGPL-3.0-or-later #}
+
+{% block head-title %}{% trans "Delete account" %} - {% endblock %}
+
+{% block account-content %}
+    <h1>{% trans "Delete account" %}</h1>
+    <section>
+        <p class="alert alert-danger">{% trans 'Deleting your account will delete all your apps and releases as well. To delete your account, insert your email address into the input field and click the "Delete account" button.' %}</p>
+        <form method="POST" action="{% url 'user:account-deletion' %}">
+            {% include 'form-fields.html' %}
+{#            <p><input type="submit" class="btn btn-danger" value="{% trans 'Delete account' %}"></p>#}
+            <p>
+                <button type="submit" class="btn btn-danger">
+                    <span class="icon material-symbols-outlined">person_remove</span>
+                    {% trans 'Delete account' %}
+                </button>
+            </p>
+        </form>
+    </section>
+{% endblock %}

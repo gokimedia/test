@@ -1,0 +1,10 @@
+{ "translations": {
+    "Saved" : "Պահված",
+    "TLS" : "TLS",
+    "Select" : "Select",
+    "Yes" : "Այո",
+    "No" : "Ոչ",
+    "Save" : "Պահպանել",
+    "Description" : "Նկարագրություն"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

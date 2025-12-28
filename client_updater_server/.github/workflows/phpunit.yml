@@ -1,0 +1,37 @@
+# SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: MIT
+name: PHPUnit
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  php:
+    runs-on: ubuntu-latest
+
+    strategy:
+      # do not stop on another job's failure
+      fail-fast: false
+      matrix:
+        php-versions: ['8.1']
+
+    name: php${{ matrix.php-versions }}
+
+    steps:
+      - name: Set up php ${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, iconv, fileinfo, intl
+          coverage: none
+
+      - name: Checkout server
+        uses: actions/checkout@v2
+
+      - name: Run unit tests
+        run: |
+          composer install
+          sh -c "cd tests/unit/ && ../../vendor/bin/phpunit ."

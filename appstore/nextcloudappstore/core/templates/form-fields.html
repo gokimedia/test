@@ -1,0 +1,70 @@
+{% load css_class field_type i18n %}
+{% csrf_token %}
+{# SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors #}
+{# SPDX-License-Identifier: AGPL-3.0-or-later #}
+{% if form.non_field_errors  %}
+    {% for error in form.non_field_errors %}
+        <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        <span class="sr-only">(error)</span>
+        <p class="text-danger">{{ error }}</p>
+    {% endfor %}
+{% endif %}
+{% for field in form.visible_fields %}
+    <div class="form-group {% if field.errors %}has-error has-feedback{% endif %}">
+
+        {% if field|field_type == 'CheckboxInput' %}
+
+            <label class="control-label checkbox-group" for="{{ field.id_for_label }}">
+                {{ field.label }}
+                {{ field }}
+                <span class="checkmark"></span>
+            </label>
+        {% else %}
+
+            {% if field.field.required %}
+                <label title="{% trans 'required field' %}" class="control-label" for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                    <span class="required-field material-symbols-outlined">asterisk</span>
+                </label>
+            {% else %}
+                <label class="control-label" for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+            {% endif %}
+
+            {% if field|field_type == 'RadioSelect' %}
+                {{ field }}
+            {% else %}
+                {{ field|css_class:'form-control' }}
+            {% endif %}
+
+        {% endif %}
+
+        {% if field.errors %}
+            {% for error in field.errors %}
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                <span class="sr-only">(error)</span>
+                <p class="text-danger">{{ error }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <!-- javascript errors -->
+        <div hidden>
+            <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+            <span class="sr-only">(error)</span>
+            <p class="text-danger error-msg-{{field.name}}"></p>
+        </div>
+
+        {% if field.help_text %}
+            {% if form.safe_help_fields and field.name in form.safe_help_fields %}
+                <p class="help-block">{{ field.help_text|safe }}</p>
+            {% else %}
+                <p class="help-block">{{ field.help_text }}</p>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endfor %}
+{% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+{% endif %}
+

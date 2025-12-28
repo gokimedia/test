@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="6.5.0@38fc8444edf0cebc9205296ee6e30e906ade783b">
+  <file src="lib/Activity/ProviderParser.php">
+    <TypeDoesNotContainType>
+      <code><![CDATA[str_starts_with($sK, '_')]]></code>
+    </TypeDoesNotContainType>
+  </file>
+  <file src="lib/Circles/FileSharingBroadcaster.php">
+    <DeprecatedClass>
+      <code><![CDATA[FileSharesRequest]]></code>
+      <code><![CDATA[FileSharesRequest::class]]></code>
+      <code><![CDATA[Server::get(FileSharesRequest::class)]]></code>
+      <code><![CDATA[Server::get(TokensRequest::class)]]></code>
+      <code><![CDATA[SharesToken]]></code>
+      <code><![CDATA[SharesToken]]></code>
+      <code><![CDATA[SharesToken]]></code>
+      <code><![CDATA[TokensRequest]]></code>
+      <code><![CDATA[TokensRequest::class]]></code>
+    </DeprecatedClass>
+    <DeprecatedMethod>
+      <code><![CDATA[MiscService::getContactData($contactId)]]></code>
+      <code><![CDATA[MiscService::getContactData($contactId)]]></code>
+      <code><![CDATA[MiscService::getContactData($member->getUserId())]]></code>
+    </DeprecatedMethod>
+    <InvalidScalarArgument>
+      <code><![CDATA[$share->getId()]]></code>
+      <code><![CDATA[$share->getId()]]></code>
+    </InvalidScalarArgument>
+    <TypeDoesNotContainType>
+      <code><![CDATA[!$sendPasswordByMail]]></code>
+      <code><![CDATA[$sendPasswordByMail]]></code>
+    </TypeDoesNotContainType>
+  </file>
+  <file src="lib/Command/CirclesRemote.php">
+    <UndefinedMethod>
+      <code><![CDATA[setType]]></code>
+    </UndefinedMethod>
+  </file>
+  <file src="lib/Command/CirclesReport.php">
+    <UndefinedClass>
+      <code><![CDATA[IInteractiveShellClient]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Command/MembersAdd.php">
+    <UndefinedMethod>
+      <code><![CDATA[retrieveJson]]></code>
+    </UndefinedMethod>
+  </file>
+  <file src="lib/Command/MigrateCustomGroups.php">
+    <DeprecatedMethod>
+      <code><![CDATA[getAppValue]]></code>
+      <code><![CDATA[setAppValue]]></code>
+    </DeprecatedMethod>
+  </file>
+  <file src="lib/Db/AccountsRequest.php">
+    <DeprecatedClass>
+      <code><![CDATA[new MemberDoesNotExistException()]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="lib/Db/DeprecatedRequestBuilder.php">
+    <DeprecatedConstant>
+      <code><![CDATA[QueryBuilder::SELECT]]></code>
+      <code><![CDATA[QueryBuilder::SELECT]]></code>
+      <code><![CDATA[QueryBuilder::SELECT]]></code>
+      <code><![CDATA[QueryBuilder::SELECT]]></code>
+      <code><![CDATA[QueryBuilder::SELECT]]></code>
+      <code><![CDATA[QueryBuilder::SELECT]]></code>
+    </DeprecatedConstant>
+  </file>
+  <file src="lib/Db/FileSharesRequest.php">
+    <DeprecatedClass>
+      <code><![CDATA[FileSharesRequestBuilder]]></code>
+    </DeprecatedClass>
+    <InvalidScalarArgument>
+      <code><![CDATA[self::SHARE_TYPE]]></code>
+      <code><![CDATA[self::SHARE_TYPE]]></code>
+    </InvalidScalarArgument>
+  </file>
+  <file src="lib/Db/GSSharesRequest.php">
+    <DeprecatedClass>
+      <code><![CDATA[GSSharesRequestBuilder]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="lib/Db/MemberRequest.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[$this->getItemsFromRequest($qb)]]></code>
+      <code><![CDATA[$this->getItemsFromRequest($qb)]]></code>
+      <code><![CDATA[$this->getItemsFromRequest($qb)]]></code>
+      <code><![CDATA[$this->getItemsFromRequest($qb)]]></code>
+      <code><![CDATA[$this->getItemsFromRequest($qb, true)]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[FederatedUser[]]]></code>
+      <code><![CDATA[Member[]]]></code>
+      <code><![CDATA[Member[]]]></code>
+      <code><![CDATA[Member[]]]></code>
+      <code><![CDATA[Member[]]]></code>
+    </InvalidReturnType>
+  </file>
+  <file src="lib/Db/ShareWrapperRequest.php">
+    <DeprecatedConstant>
+      <code><![CDATA[IQueryBuilder::PARAM_DATE]]></code>
+      <code><![CDATA[IQueryBuilder::PARAM_DATE]]></code>
+    </DeprecatedConstant>
+  </file>
+  <file src="lib/Db/TokensRequest.php">
+    <DeprecatedClass>
+      <code><![CDATA[SharesToken]]></code>
+      <code><![CDATA[SharesToken]]></code>
+      <code><![CDATA[SharesToken]]></code>
+      <code><![CDATA[SharesToken]]></code>
+      <code><![CDATA[TokensRequestBuilder]]></code>
+    </DeprecatedClass>
+    <InvalidScalarArgument>
+      <code><![CDATA[$shareId]]></code>
+      <code><![CDATA[$shareId]]></code>
+    </InvalidScalarArgument>
+  </file>
+  <file src="lib/Db/TokensRequestBuilder.php">
+    <DeprecatedClass>
+      <code><![CDATA[SharesToken]]></code>
+      <code><![CDATA[new SharesToken()]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="lib/FederatedItems/SharedItemsSync.php">
+    <UndefinedClass>
+      <code><![CDATA[CircleEventService]]></code>
+    </UndefinedClass>
+    <UndefinedDocblockClass>
+      <code><![CDATA[$this->circleEventService]]></code>
+      <code><![CDATA[CircleEventService]]></code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="lib/IBroadcaster.php">
+    <DeprecatedClass>
+      <code><![CDATA[SharingFrame]]></code>
+      <code><![CDATA[SharingFrame]]></code>
+      <code><![CDATA[SharingFrame]]></code>
+      <code><![CDATA[SharingFrame]]></code>
+      <code><![CDATA[SharingFrame]]></code>
+      <code><![CDATA[SharingFrame]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="lib/Migration/Version0022Date20220526113601.php">
+    <UndefinedClass>
+      <code><![CDATA[Types]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Model/BaseCircle.php">
+    <FalsableReturnStatement>
+      <code><![CDATA[json_encode($this->settings)]]></code>
+    </FalsableReturnStatement>
+    <InvalidReturnStatement>
+      <code><![CDATA[$this->type]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[string]]></code>
+    </InvalidReturnType>
+    <RedundantCast>
+      <code><![CDATA[(array)self::CIRCLES_SETTINGS_DEFAULT]]></code>
+    </RedundantCast>
+  </file>
+  <file src="lib/Model/BaseMember.php">
+    <InvalidNullableReturnType>
+      <code><![CDATA[DeprecatedMember]]></code>
+    </InvalidNullableReturnType>
+    <NullableReturnStatement>
+      <code><![CDATA[self::fromArray(json_decode($json, true))]]></code>
+    </NullableReturnStatement>
+  </file>
+  <file src="lib/Model/Circle.php">
+    <LessSpecificImplementedReturnType>
+      <code><![CDATA[self]]></code>
+    </LessSpecificImplementedReturnType>
+  </file>
+  <file src="lib/Model/DavCard.php">
+    <InvalidScalarArgument>
+      <code><![CDATA[$this->get('addressBookId', $data)]]></code>
+    </InvalidScalarArgument>
+  </file>
+  <file src="lib/Model/DeprecatedCircle.php">
+    <DeprecatedClass>
+      <code><![CDATA[BaseCircle]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="lib/Model/DeprecatedMember.php">
+    <DeprecatedClass>
+      <code><![CDATA[BaseMember]]></code>
+      <code><![CDATA[new MemberDoesNotExistException($this->l10n->t('This member does not exist'))]]></code>
+      <code><![CDATA[new MemberDoesNotExistException($this->l10n->t('This member does not exist'))]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="lib/Model/Federated/RemoteInstance.php">
+    <LessSpecificImplementedReturnType>
+      <code><![CDATA[NCSignatory]]></code>
+    </LessSpecificImplementedReturnType>
+  </file>
+  <file src="lib/Model/FederatedLink.php">
+    <InvalidPropertyAssignmentValue>
+      <code><![CDATA[$circleUniqueId]]></code>
+    </InvalidPropertyAssignmentValue>
+    <InvalidReturnStatement>
+      <code><![CDATA[$this->circleUniqueId]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[string]]></code>
+    </InvalidReturnType>
+    <InvalidScalarArgument>
+      <code><![CDATA[$this->circleUniqueId]]></code>
+    </InvalidScalarArgument>
+  </file>
+  <file src="lib/Model/FederatedUser.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[$arr]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[string[]]]></code>
+    </InvalidReturnType>
+    <LessSpecificImplementedReturnType>
+      <code><![CDATA[self]]></code>
+    </LessSpecificImplementedReturnType>
+  </file>
+  <file src="lib/Model/GlobalScale/GSEvent.php">
+    <DeprecatedMethod>
+      <code><![CDATA[getDeprecatedCircle]]></code>
+      <code><![CDATA[getDeprecatedCircle]]></code>
+      <code><![CDATA[getDeprecatedCircle]]></code>
+      <code><![CDATA[getDeprecatedCircle]]></code>
+      <code><![CDATA[setDeprecatedCircle]]></code>
+    </DeprecatedMethod>
+  </file>
+  <file src="lib/Model/Member.php">
+    <InvalidClass>
+      <code><![CDATA[$inheritedBy]]></code>
+    </InvalidClass>
+    <InvalidReturnStatement>
+      <code><![CDATA[$arr]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[string[]]]></code>
+    </InvalidReturnType>
+    <LessSpecificImplementedReturnType>
+      <code><![CDATA[self]]></code>
+    </LessSpecificImplementedReturnType>
+  </file>
+  <file src="lib/Model/ModelManager.php">
+    <DeprecatedMethod>
+      <code><![CDATA[isInstalled]]></code>
+    </DeprecatedMethod>
+  </file>
+  <file src="lib/Model/Mount.php">
+    <DeprecatedClass>
+      <code><![CDATA[CircleMountManager]]></code>
+      <code><![CDATA[CircleMountManager]]></code>
+      <code><![CDATA[CircleMountManager]]></code>
+      <code><![CDATA[CircleMountManager]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="lib/Model/Probes/BasicProbe.php">
+    <InvalidReturnType>
+      <code><![CDATA[$this]]></code>
+    </InvalidReturnType>
+  </file>
+  <file src="lib/Model/ShareWrapper.php">
+    <InvalidNullableReturnType>
+      <code><![CDATA[Circle]]></code>
+      <code><![CDATA[FileCacheWrapper]]></code>
+      <code><![CDATA[Member]]></code>
+      <code><![CDATA[Member]]></code>
+      <code><![CDATA[ShareToken]]></code>
+    </InvalidNullableReturnType>
+    <NullableReturnStatement>
+      <code><![CDATA[$this->circle]]></code>
+      <code><![CDATA[$this->fileCache]]></code>
+      <code><![CDATA[$this->initiator]]></code>
+      <code><![CDATA[$this->owner]]></code>
+      <code><![CDATA[$this->shareToken]]></code>
+    </NullableReturnStatement>
+  </file>
+  <file src="lib/Model/SharesToken.php">
+    <InvalidScalarArgument>
+      <code><![CDATA[$this->get('share_id', $data, '')]]></code>
+    </InvalidScalarArgument>
+  </file>
+  <file src="lib/Model/SharingFrame.php">
+    <FalsableReturnStatement>
+      <code><![CDATA[json_encode($this->headers)]]></code>
+      <code><![CDATA[json_encode($this->payload)]]></code>
+    </FalsableReturnStatement>
+    <NullArgument>
+      <code><![CDATA[null]]></code>
+    </NullArgument>
+    <NullableReturnStatement>
+      <code><![CDATA[null]]></code>
+      <code><![CDATA[null]]></code>
+    </NullableReturnStatement>
+  </file>
+  <file src="lib/MountManager/CircleMount.php">
+    <UndefinedClass>
+      <code><![CDATA[MoveableMount]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/MountManager/CircleMountManager.php">
+    <DeprecatedClass>
+      <code><![CDATA[GSSharesRequest]]></code>
+      <code><![CDATA[GSSharesRequest]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="lib/MountManager/CircleMountProvider.php">
+    <DeprecatedClass>
+      <code><![CDATA[private]]></code>
+    </DeprecatedClass>
+    <MissingDependency>
+      <code><![CDATA[CircleMount]]></code>
+    </MissingDependency>
+    <UndefinedClass>
+      <code><![CDATA[ExternalStorage]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Search/LocalUsers.php">
+    <DeprecatedMethod>
+      <code><![CDATA[search]]></code>
+    </DeprecatedMethod>
+  </file>
+  <file src="lib/Service/FederatedShareService.php">
+    <InvalidMethodCall>
+      <code><![CDATA[gObj]]></code>
+    </InvalidMethodCall>
+  </file>
+  <file src="lib/Service/GlobalScaleService.php">
+    <UndefinedClass>
+      <code><![CDATA[Signer]]></code>
+    </UndefinedClass>
+    <UndefinedDocblockClass>
+      <code><![CDATA[Signer]]></code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="lib/Service/MembershipService.php">
+    <ConflictingReferenceConstraint>
+      <code><![CDATA[if (!in_array($member->getCircleId(), $knownIds)) {]]></code>
+    </ConflictingReferenceConstraint>
+  </file>
+  <file src="lib/Service/MiscService.php">
+    <DeprecatedMethod>
+      <code><![CDATA[MiscService::getContactData($member->getUserId())]]></code>
+      <code><![CDATA[search]]></code>
+      <code><![CDATA[self::getContactData($ident)]]></code>
+      <code><![CDATA[self::getDisplayContactFromArray($display, $contact)]]></code>
+    </DeprecatedMethod>
+    <InvalidReturnType>
+      <code><![CDATA[string]]></code>
+    </InvalidReturnType>
+    <TypeDoesNotContainType>
+      <code><![CDATA[is_array($contact)]]></code>
+    </TypeDoesNotContainType>
+  </file>
+  <file src="lib/Service/RemoteStreamService.php">
+    <RedundantCondition>
+      <code><![CDATA[is_null($object)]]></code>
+    </RedundantCondition>
+  </file>
+  <file src="lib/Service/SyncService.php">
+    <DeprecatedMethod>
+      <code><![CDATA[search]]></code>
+    </DeprecatedMethod>
+  </file>
+  <file src="lib/Service/TimezoneService.php">
+    <UndefinedClass>
+      <code><![CDATA[TimeFactory]]></code>
+    </UndefinedClass>
+    <UndefinedDocblockClass>
+      <code><![CDATA[$this->timeFactory]]></code>
+      <code><![CDATA[TimeFactory]]></code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="lib/ShareByCircleProvider.php">
+    <ImplementedParamTypeMismatch>
+      <code><![CDATA[$shareId]]></code>
+    </ImplementedParamTypeMismatch>
+    <InvalidNullableReturnType>
+      <code><![CDATA[IShare]]></code>
+      <code><![CDATA[IShare]]></code>
+      <code><![CDATA[IShare]]></code>
+      <code><![CDATA[IShare]]></code>
+      <code><![CDATA[IShare]]></code>
+    </InvalidNullableReturnType>
+    <LessSpecificImplementedReturnType>
+      <code><![CDATA[array]]></code>
+    </LessSpecificImplementedReturnType>
+    <NullableReturnStatement>
+      <code><![CDATA[$wrappedShare->getShare($this->rootFolder, $this->userManager, $this->urlGenerator)]]></code>
+      <code><![CDATA[$wrappedShare->getShare($this->rootFolder, $this->userManager, $this->urlGenerator)]]></code>
+      <code><![CDATA[$wrappedShare->getShare($this->rootFolder, $this->userManager, $this->urlGenerator)]]></code>
+      <code><![CDATA[$wrappedShare->getShare($this->rootFolder, $this->userManager, $this->urlGenerator)]]></code>
+      <code><![CDATA[$wrappedShare->getShare($this->rootFolder, $this->userManager, $this->urlGenerator)]]></code>
+    </NullableReturnStatement>
+    <ParamNameMismatch>
+      <code><![CDATA[$shareId]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="lib/Tools/ActivityPub/NCSignature.php">
+    <RedundantCondition>
+      <code><![CDATA[$varr[0] !== null]]></code>
+    </RedundantCondition>
+  </file>
+  <file src="lib/Tools/Db/ExtendedQueryBuilder.php">
+    <DeprecatedConstant>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[DBALQueryBuilder::SELECT]]></code>
+      <code><![CDATA[IQueryBuilder::PARAM_DATE]]></code>
+      <code><![CDATA[IQueryBuilder::PARAM_DATE]]></code>
+    </DeprecatedConstant>
+  </file>
+  <file src="lib/Tools/Model/NCRequestResult.php">
+    <UndefinedClass>
+      <code><![CDATA[BadResponseException]]></code>
+      <code><![CDATA[BadResponseException]]></code>
+      <code><![CDATA[BadResponseException|null]]></code>
+    </UndefinedClass>
+    <UndefinedDocblockClass>
+      <code><![CDATA[BadResponseException]]></code>
+      <code><![CDATA[private $exception = null;]]></code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="lib/Tools/Model/Request.php">
+    <FalsableReturnStatement>
+      <code><![CDATA[json_encode($this->getData())]]></code>
+    </FalsableReturnStatement>
+    <InvalidNullableReturnType>
+      <code><![CDATA[string]]></code>
+      <code><![CDATA[string]]></code>
+    </InvalidNullableReturnType>
+    <NullableReturnStatement>
+      <code><![CDATA[preg_replace(
+			'/([(%5B)]{1})[0-9]+([(%5D)]{1})/', '$1$2', http_build_query($this->getData())
+		)]]></code>
+      <code><![CDATA[preg_replace(
+			'/([(%5B)]{1})[0-9]+([(%5D)]{1})/', '$1$2', http_build_query($this->getParams())
+		)]]></code>
+    </NullableReturnStatement>
+  </file>
+  <file src="lib/Tools/Model/SimpleDataStore.php">
+    <DeprecatedMethod>
+      <code><![CDATA[haveKey]]></code>
+    </DeprecatedMethod>
+    <InvalidReturnStatement>
+      <code><![CDATA[$item]]></code>
+    </InvalidReturnStatement>
+  </file>
+  <file src="lib/Tools/Model/TreeNode.php">
+    <InvalidNullableReturnType>
+      <code><![CDATA[TreeNode]]></code>
+    </InvalidNullableReturnType>
+    <NullableReturnStatement>
+      <code><![CDATA[$this->currentChild]]></code>
+    </NullableReturnStatement>
+  </file>
+  <file src="lib/Tools/Traits/TArrayTools.php">
+    <TooManyArguments>
+      <code><![CDATA[getArray]]></code>
+    </TooManyArguments>
+  </file>
+  <file src="lib/Tools/Traits/TNCLogger.php">
+    <RedundantCondition>
+      <code><![CDATA[isset($this->logger)]]></code>
+    </RedundantCondition>
+    <UndefinedClass>
+      <code><![CDATA[HintException]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Tools/Traits/TNCRequest.php">
+    <InvalidArgument>
+      <code><![CDATA[$e]]></code>
+    </InvalidArgument>
+    <UndefinedClass>
+      <code><![CDATA[ClientException]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Tools/Traits/TNCSignatory.php">
+    <UndefinedMethod>
+      <code><![CDATA[getOpenSSLAlgo]]></code>
+    </UndefinedMethod>
+  </file>
+  <file src="lib/Tools/Traits/TStringTools.php">
+    <InvalidArrayOffset>
+      <code><![CDATA[$s[$e]]]></code>
+    </InvalidArrayOffset>
+  </file>
+</files>

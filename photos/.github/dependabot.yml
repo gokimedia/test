@@ -1,0 +1,86 @@
+version: 2
+updates:
+- package-ecosystem: "github-actions"
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: sunday
+    time: "06:00"
+    timezone: Europe/Paris
+
+- package-ecosystem: composer
+  versioning-strategy: increase
+  directories:
+    - "/"
+    - "/vendor-bin/cs-fixer"
+    - "/vendor-bin/phpunit"
+    - "/vendor-bin/psalm"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  labels:
+    - "3. to review"
+    - "dependencies"
+
+- package-ecosystem: npm
+  versioning-strategy: increase
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  labels:
+    - "3. to review"
+    - "dependencies"
+
+# Main stableXX npm
+- package-ecosystem: npm
+  target-branch: stable32
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  labels:
+    - "3. to review"
+    - "dependencies"
+  ignore:
+    # do not do breaking changes on stable branches
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major"]
+
+- package-ecosystem: npm
+  target-branch: stable31
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  labels:
+    - "3. to review"
+    - "dependencies"
+  ignore:
+    # do not do breaking changes on stable branches
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]
+
+- package-ecosystem: npm
+  target-branch: stable30
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  labels:
+    - "3. to review"
+    - "dependencies"
+  ignore:
+    # only do patch releases on old stable
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]

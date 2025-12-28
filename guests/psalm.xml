@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+  - SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+<psalm
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    errorBaseline="tests/psalm-baseline.xml"
+    errorLevel="4"
+    findUnusedBaselineEntry="false"
+    findUnusedCode="false"
+    phpVersion="8.1"
+    resolveFromConfigFile="true"
+    totallyTyped="true"
+>
+    <stubs>
+        <file name="tests/stub.php" preloadClasses="true"/>
+    </stubs>
+    <projectFiles>
+        <directory name="lib" />
+        <ignoreFiles>
+            <directory name="vendor" />
+        </ignoreFiles>
+    </projectFiles>
+    <extraFiles>
+        <directory name="vendor" />
+        <ignoreFiles>
+            <directory name="vendor/phpunit/php-code-coverage" />
+        </ignoreFiles>
+    </extraFiles>
+    <issueHandlers>
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress">
+                <referencedClass name="Doctrine\DBAL\Schema\Schema" />
+                <referencedClass name="Doctrine\DBAL\Schema\SchemaException" />
+                <referencedClass name="Doctrine\DBAL\Driver\Statement" />
+                <referencedClass name="Doctrine\DBAL\Schema\Table" />
+                <referencedClass name="OC\AppFramework\OCS\BaseResponse"/>
+                <referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
+            </errorLevel>
+        </UndefinedDocblockClass>
+        <UndefinedInterfaceMethod>
+            <errorLevel type="suppress">
+                <!-- FIXME Deprecated event handling -->
+                <referencedMethod name="OCP\IUserManager::listen" />
+                <referencedMethod name="OCP\IGroupManager::listen" />
+            </errorLevel>
+        </UndefinedInterfaceMethod>
+    </issueHandlers>
+</psalm>

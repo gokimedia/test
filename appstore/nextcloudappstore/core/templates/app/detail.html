@@ -1,0 +1,346 @@
+{% extends 'app/base.html' %}
+{% load i18n sort_by_version static app_rating app_rating_class humanize %}
+
+{# SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors #}
+{# SPDX-License-Identifier: AGPL-3.0-or-later #}
+
+{% block head-title %}{{ object.name }} - {% trans 'Apps' %} - {% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'assets/css/img-slider.css' %}" charset="utf-8">
+    <link rel="stylesheet" href="{% static 'vendor/github.css' %}" charset="utf-8">
+    <script defer src="{% static 'public/app/detail.js' %}" type="text/javascript"></script>
+    <meta name="description-url" content="{% url 'app-description' object.id %}">
+    <meta name="ratings-url" content="{% url 'app-ratings' object.id %}">
+    <meta name="language-code" content="{{ request.LANGUAGE_CODE }}">
+    <meta name="fallback-language-code" content="{{ fallbackLang }}">
+{% endblock %}
+
+{% block feeds %}
+    <link rel="alternate" type="application/atom+xml" title="{% blocktrans with app_name=object.name %}Latest {{ app_name }} releases{% endblocktrans %}" href="{% url 'feeds-releases-atom'%}?app={{ object.id }}" />
+    <link rel="alternate" type="application/rss+xml" title="{% blocktrans with app_name=object.name %}Latest {{ app_name }} releases{% endblocktrans %}" href="{% url 'feeds-releases-rss'%}?app={{ object.id }}" />
+{% endblock %}
+
+{% block apps %}
+    {% if object.screenshots.all %}
+        <section id="app-gallery-container">
+            <div id="app-gallery" class="carousel slide" data-ride="carousel" data-interval="false">
+                <div class="inner-container">
+                    <a class="left carousel-control {% if object.screenshots.all|length < 2 %}hidden{% endif %}" href="#app-gallery" role="button" data-slide="prev">
+                        <span class="icon icon-chevron-left" aria-hidden="true" aria-label="{% trans 'Previous' %}"></span>
+                    </a>
+                    <div class="carousel-inner" role="listbox">
+                        {% for screenshot in object.screenshots.all %}
+                            <div class="item {% if forloop.first %}active{% endif %}">
+                                <img src="{{ screenshot.url }}" alt="{% trans 'Screenshot' %}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <a class="right carousel-control {% if object.screenshots.all|length < 2 %}hidden{% endif %}" href="#app-gallery" role="button" data-slide="next">
+                        <span class="icon icon-chevron-right" aria-hidden="true" aria-label="{% trans 'Next' %}"></span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+    {% if object.is_server_bundled %}
+        <div class="alert alert-info" role="alert">
+            <strong>
+                {% trans "This app has become part of the Nextcloud Server release packages." %}
+            </strong>
+            {% trans "It is no longer actively distributed via the app store, but when updating the Nextcloud Server the app will be updated to the latest version automatically." %}
+        </div>
+    {% elif object.is_outdated %}
+        <div class="alert alert-warning" role="alert">
+            <strong>
+                {% trans "This app hasn’t been tested with the latest 3 major releases of Nextcloud." %}
+            </strong>
+            {% trans "It may no longer be maintained or supported and may have compatibility issues when used with more recent versions of Nextcloud." %}
+        </div>
+    {% endif %}
+    <div class="header-wrap">
+        <h1>{{ object.name }}</h1>
+        {% if object.is_featured %}<span class="tag featured">{% trans "Featured" %}</span>{% endif %}
+        {% if object.is_orphan %}<span class="tag tag-danger">{% trans "Orphan / Looking for Maintainer" %}</span>{% endif %}
+    </div>
+    <div class="app-meta col-md-4 col-sm-12">
+        <section>
+            <h5>{% trans "Highest Nextcloud version" %}</h5>
+            {% with latest_releases_by_platform_v|sort_by_version:'asc'|last as latest_release %}
+                <p>
+                    Nextcloud {{ latest_release.0 }} <br />
+                    <a href="{% url 'app-releases' object.id %}?platform={{ latest_release.0 }}#{{ latest_release.0 }}">{% trans "Show all releases" %}</a>
+                </p>
+            {% endwith %}
+            <h5>{% trans "Community rating" %}</h5>
+            <img class="app-score-image" src="/static/assets/img/rating/s{{ object.rating_overall|app_rating_img }}.svg" alt="">
+
+            {% if object.authors.all %}
+            <h5>{% trans "Authors" %}</h5>
+            <ul class="authors">
+                {% for a in object.authors.all %}
+                <li>
+                    {% if a.homepage %}
+                        <a href="{{ a.homepage }}" rel="noopener noreferrer">{{ a.name }}</a>
+                    {% else %}
+                        {{ a.name }}
+                    {% endif %}
+                    {% if a.mail %}
+                        <a rel="noreferrer noopener" href="mailto:{{ a.mail }}">
+                            <span class="icon icon-mail"></span>
+                        </a>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% if object.owner %}
+            <h5>{% trans "Owner" %}</h5>
+            <p>
+                {% if object.owner.first_name or object.owner.last_name %}
+                    {{ object.owner.first_name }} {{ object.owner.last_name }}
+                {% else %}
+                    Anonymous
+                {% endif %}
+            </p>
+            {% endif %}
+            {% if object.co_maintainers.all %}
+            <h5>{% trans "Co-Maintainers" %}</h5>
+            <ul class="list-inline">
+                {% for a in object.co_maintainers.all %}
+                <li>{% if a.get_fullname %}
+                    {{ a.get_fullname }}
+                    {% else %}
+                    {{ a.username }}
+                    {% endif %}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% if object.last_release %}
+            <h5>{% trans "Last updated" %}</h5>
+            <p>{{ object.last_release|naturaltime }}</p>
+            {% endif %}
+            <h5>{% trans "Categories" %}</h5>
+            <p>{{ object.categories.all|join:", " }}</p>
+        </section>
+        {% if object.website or object.user_docs or object.admin_docs or object.developer_docs %}
+        <section class="resources">
+            <h5>{% trans "Resources" %}</h5>
+            <ul>
+                {% if object.website %}
+                <li><a href="{{ object.website }}" rel="noopener noreferrer">{% trans "Homepage" %}</a></li>
+                {% endif %}
+                {% if object.user_docs %}
+                <li><a href="{{ object.user_docs }}" rel="noopener noreferrer">{% trans "User documentation" %}</a></li>
+                {% endif %}
+                {% if object.admin_docs %}
+                <li><a href="{{ object.admin_docs }}" rel="noopener noreferrer">{% trans "Admin documentation" %}</a></li>
+                {% endif %}
+                {% if object.developer_docs %}
+                <li><a href="{{ object.developer_docs }}" rel="noopener noreferrer">{% trans "Developer documentation" %}</a></li>
+                {% endif %}
+            </ul>
+        </section>
+        {% endif %}
+        <section class="interact-section">
+            <h5>{% trans "Interact" %}</h5>
+            {% if object.issue_tracker %}
+                <a rel="noreferrer noopener"
+                       href="{{ object.issue_tracker }}"
+                       class="btn btn-primary">
+                    <span class="icon icon-bug-outline icon-white"></span>
+                    {% trans 'Report problem' %}
+                </a>
+                <a rel="noreferrer noopener"
+                       href="{{ object.issue_tracker }}"
+                       class="btn btn-default btn-light">
+                    <span class="icon icon-feature-search-outline"></span>
+                    {% trans 'Request feature' %}
+                </a>
+            {% endif %}
+            <a rel="noreferrer noopener"
+               href="{{ object.discussion_url }}"
+               class="btn btn-default btn-light">
+                <span class="icon icon-comment-question-outline"></span>
+                {% trans 'Ask questions or discuss' %}
+            </a>
+        </section>
+        {% if object.donations.all %}
+        <section class="donate-section">
+            <h5>{% trans 'Donate' %}</h5>
+            {% for donation in object.donations.all %}
+                <a rel="noreferrer noopener"
+                       href="{{ donation.url }}"
+                       class="btn btn-default btn-light">
+                    <span class="icon icon-donate-{{ donation.type }}"></span>
+                    {{ donation.title }}
+                </a>
+            {% endfor %}
+        </section>
+        {% endif %}
+        {% if object.is_enterprise_supported %}
+        <section class="support-section">
+            <h5>{% trans 'Need Enterprise Support?' %}</h5>
+            <a rel="noreferrer noopener"
+               href="https://nextcloud.com/get-a-quote/?utm_source=apps.nextcloud.com&utm_campaign={{ object.id }}"
+               class="btn btn-default btn-light">
+                <span class="icon icon-send"></span>
+                {% trans 'Request quote' %}
+            </a>
+            {% trans 'Recommended for large Nextcloud installations only.' %}
+        </section>
+        {% endif %}
+    </div>
+
+    <section class="app-description markdown loading"></section>
+
+    {% if not object.is_integration %}
+    <div class="row app-download">
+        <div class="col-md-12">
+            <section>
+                <h3 id="downloads" class="section-heading">{% trans "Releases" %}</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Nextcloud version" %}</th>
+                            <th>{% trans "Stable channel" %}</th>
+                            <th>{% trans "Nightly channel" %}</th>
+                            <th>{% trans "All releases" %}</th>
+                        </tr>
+                    </thead>
+                    {% for platform_v, releases in latest_releases_by_platform_v|sort_by_version:'desc' %}
+                        {% if releases.stable or releases.unstable %}
+                            <tr>
+                                <td>{{ platform_v }}</td>
+                                <td>{% if releases.stable %}<a href="{{ releases.stable.download }}" rel="noopener noreferrer">{{ releases.stable.version }}</a>{% endif %}</td>
+                                <td class="nightly-channel-column">{% if releases.unstable %}<a href="{{ releases.unstable.download }}" rel="noopener noreferrer" class="unstable">{{ releases.unstable.version }}{% if releases.unstable.is_nightly %} - {% trans 'nightly' %}{% endif %} ({%  trans 'Unstable' %})</a>{% else %}-{% endif %}</td>
+                                <td><a href="{% url 'app-releases' object.id %}?platform={{ platform_v }}#{{ platform_v }}">{{ platform_v }}</a></td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </section>
+        </div>
+    </div>
+    {% endif %}
+
+    <template id="rating-template">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="rating-comment">
+                    <header>
+                        <div class="author"></div>
+                        <div class="rating rating-good">
+                            <img class="app-score-image" src="/static/assets/img/rating/s10.svg" alt="{% trans 'Good' %}">
+                        </div>
+                        <div class="rating rating-ok">
+                            <img class="app-score-image" src="/static/assets/img/rating/s5.svg" alt="{% trans 'Ok' %}">
+                        </div>
+                        <div class="rating rating-bad">
+                            <img class="app-score-image" src="/static/assets/img/rating/s1.svg" alt="{% trans 'Bad' %}">
+                        </div>
+                        <div class="date"></div>
+                    </header>
+                    <div class="comment"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="rating-comment-actions">
+        <div class="comment-actions">
+            {% csrf_token %}
+            <input type="hidden" name="comment-action-url" value="{% url 'app-detail' object.id %}">
+            {% if request.user.is_superuser %}
+                {% if request.user == object.owner %}
+                    <button class="btn btn-primary comment-actions-button comment-actions__appeal">
+                        <span class="icon material-symbols-outlined">flag</span>
+                        {% trans 'Appeal for spam' %}
+                    </button>
+                {% endif %}
+                <button class="btn btn-primary comment-actions-button comment-actions__appeal_cancel_admin">
+                    <span class="icon material-symbols-outlined">delete_history</span>
+                    {% trans 'Cancel spam appeal' %}
+                </button>
+                <button class="btn btn-danger comment-actions-button comment-actions__delete">
+                    <span class="icon material-symbols-outlined">delete</span>
+                    {% trans 'Delete spam comment' %}
+                </button>
+            {% elif request.user == object.owner %}
+                <button class="btn btn-primary comment-actions-button comment-actions__appeal">
+                    <span class="icon material-symbols-outlined">flag</span>
+                    {% trans 'Appeal for spam' %}
+                </button>
+                <button class="btn btn-primary comment-actions-button comment-actions__appeal_cancel">
+                    <span class="icon material-symbols-outlined">delete_history</span>
+                    {% trans 'Cancel spam appeal' %}
+                </button>
+            {% endif %}
+        </div>
+    </template>
+
+    <template id="no-ratings-template">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                      <p class="text-center lead">{% blocktrans %}No comments found.{% endblocktrans %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="section-heading" id="comments">{% trans 'Comments' %}</h3>
+
+            {% if request.user.is_authenticated and not user_has_rated_app and request.user != object.owner %}
+                <button id="toggle-comment-button" aria-expanded="true"
+                        data-toggle="collapse" data-target="#app-ratings"
+                        class="btn btn-primary">
+                    <span class="icon icon-star-plus-outline icon-white"></span>
+                    {% if not object.is_integration %}{% trans 'Rate app' %}{% else %}{% trans 'Rate integration' %}{% endif %}
+                </button>
+            {% endif %}
+            {% if request.user.is_authenticated and request.user != object.owner %}
+                <div class="row app-ratings {% if not user_has_rated_app %}collapse{% endif %}" id="app-ratings">
+                    <div class="col-md-12">
+                        <h4 class="section-heading" id="comments">{% trans 'Your comment' %}</h4>
+                        <form action="{% url 'app-detail' object.id %}" method="post">
+                            {% csrf_token %}
+                            {% include 'form-fields.html' with form=rating_form %}
+                            <p class="help-block">
+                                {% blocktrans %}Rating comments support <a rel="noopener noreferrer" href="https://daringfireball.net/projects/markdown/syntax">Markdown</a>. Do not use rating comments to report bugs or request features. Neither developers nor users will be notified of your comment. A rating without a comment still counts, but will not be listed below.{% endblocktrans %}
+                            </p>
+                            <button type="submit" class="btn btn-primary">
+                                <span class="icon icon-star-plus-outline icon-white"></span>
+                                {% if rating_form.is_bound %}
+                                    {% trans 'Update rating' %}
+                                {% else %}
+                                    {% trans 'Submit rating' %}
+                                {% endif %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="app-rating-language">
+                {% if languages %}
+                    {% get_language_info_list for languages as languages %}
+                    <label for="comment_language">{% blocktrans %}Switch language for the comments:{% endblocktrans %}</label>
+                    <select class="form-control" id="comment_language">
+                        {% for language in languages %}
+                            <option value="{{ language.code }}"{% if language.code == request.LANGUAGE_CODE %} selected="selected"{% endif %}>
+                                {{ language.name_local }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="app-rating-list loading"></div>
+
+{% endblock %}

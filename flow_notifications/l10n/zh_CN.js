@@ -1,0 +1,10 @@
+OC.L10N.register(
+    "flow_notifications",
+    {
+    "Send a notification" : "发送一个通知",
+    "Triggers a notification" : "触发一个通知",
+    "Flow Notifications" : "流程通知",
+    "Notification action for Nextcloud Flow" : "Nextcloud 流程的通知动作",
+    "Choose a notification title (optional)" : "选择一个通知标题（可选）"
+},
+"nplurals=1; plural=0;");

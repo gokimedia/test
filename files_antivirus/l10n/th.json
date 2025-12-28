@@ -1,0 +1,15 @@
+{ "translations": {
+    "Saved" : "บันทึกแล้ว",
+    "Mode" : "โหมด",
+    "Host" : "โฮสต์",
+    "Port" : "พอร์ต",
+    "TLS" : "TLS",
+    "Select" : "เลือก",
+    "Delete file" : "ลบไฟล์",
+    "Yes" : "ใช่",
+    "No" : "ไม่ตกลง",
+    "Save" : "บันทึก",
+    "Advanced" : "ขั้นสูง",
+    "Description" : "คำอธิบาย"
+},"pluralForm" :"nplurals=1; plural=0;"
+}

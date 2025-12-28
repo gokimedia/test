@@ -1,0 +1,48 @@
+{
+	"name": "terms_of_service",
+	"description": "Requires users to accept the terms of service before accessing data.",
+	"version": "4.7.0-rc.1",
+	"author": "Joas Schilling <coding@schilljs.com>",
+	"license": "AGPL-3.0-or-later",
+	"private": true,
+	"scripts": {
+		"build": "vite --mode production build",
+		"dev": "export NODE_ENV=development; vite --mode development build",
+		"watch": "export NODE_ENV=development; vite --mode development build --watch",
+		"lint": "eslint src",
+		"lint:fix": "eslint src --fix",
+		"stylelint": "stylelint src",
+		"stylelint:fix": "stylelint src --fix"
+	},
+	"type": "module",
+	"dependencies": {
+		"@nextcloud/auth": "^2.4.0",
+		"@nextcloud/axios": "^2.5.1",
+		"@nextcloud/dialogs": "^7.1.0",
+		"@nextcloud/logger": "^3.0.2",
+		"@nextcloud/router": "^3.0.1",
+		"@nextcloud/vue": "^9.0.0",
+		"vue": "^3.5.18",
+		"vue-material-design-icons": "^5.3.1"
+	},
+	"browserslist": [
+		"extends @nextcloud/browserslist-config"
+	],
+	"engines": {
+		"node": "^24.0.0",
+		"npm": "^11.3.0"
+	},
+	"devDependencies": {
+		"@nextcloud/browserslist-config": "^3.0.1",
+		"@nextcloud/eslint-config": "^9.0.0-rc.5",
+		"@nextcloud/stylelint-config": "^3.1.0",
+		"@nextcloud/vite-config": "^2.4.0",
+		"@types/dockerode": "^3.3.47",
+		"@vue/compiler-sfc": "^3.5.25",
+		"@vue/tsconfig": "^0.8.1",
+		"ts-node": "^10.9.2",
+		"tslib": "^2.8.1",
+		"typescript": "^5.9.2",
+		"vite": "^7.1.7"
+	}
+}

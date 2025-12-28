@@ -1,0 +1,8 @@
+{ "translations": {
+    "SharePoint" : "SharePoint",
+    "Host" : "Servidor",
+    "Document Library" : "Biblioteca de documents",
+    "SharePoint Backend" : "Rerefons de SharePoint",
+    "SharePoint Backend for External storages" : "Rerefons de SharePoint per a l'emmagatzematge extern"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

@@ -1,0 +1,14 @@
+{ "translations": {
+    "Saving…" : "Enregistrament…",
+    "Saved" : "Enregistrat",
+    "Mode" : "Mòde",
+    "Host" : "Òste",
+    "Port" : "Pòrt",
+    "Select" : "Select",
+    "Delete file" : "Suprimir fichièr",
+    "Yes" : "Òc",
+    "No" : "Non",
+    "Save" : "Salvar",
+    "Description" : "Descripcion"
+},"pluralForm" :"nplurals=2; plural=(n > 1);"
+}

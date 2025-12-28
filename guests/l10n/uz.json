@@ -1,0 +1,11 @@
+{ "translations": {
+    "Couldn't send reset email. Please contact your administrator." : "Couldn't send reset email. Please contact your administrator.",
+    "None" : "Yo'q",
+    "Name" : "Name",
+    "Email" : "Email",
+    "Default" : "Standart",
+    "Cancel" : "Bekor qilish",
+    "Language" : "Language",
+    "Error" : "Xatolik"
+},"pluralForm" :"nplurals=1; plural=0;"
+}

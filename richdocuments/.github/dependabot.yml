@@ -1,0 +1,92 @@
+# SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  open-pull-requests-limit: 10
+  labels:
+    - "3. to review"
+    - "dependencies"
+
+- package-ecosystem: composer
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  versioning-strategy: "increase"
+  open-pull-requests-limit: 10
+  labels:
+    - "3. to review"
+    - "dependencies"
+
+- package-ecosystem: composer
+  directory: "/tests"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  labels:
+    - "3. to review"
+    - "dependencies"
+  open-pull-requests-limit: 10
+
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  target-branch: stable30
+  labels:
+    - "3. to review"
+    - "dependencies"
+  ignore:
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]
+  # Disable automatic rebasing because without a build CI will likely fail anyway
+  rebase-strategy: "disabled"
+
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  target-branch: stable31
+  labels:
+    - "3. to review"
+    - "dependencies"
+  ignore:
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]
+  # Disable automatic rebasing because without a build CI will likely fail anyway
+  rebase-strategy: "disabled"
+
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  target-branch: stable32
+  labels:
+    - "3. to review"
+    - "dependencies"
+  ignore:
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]
+  # Disable automatic rebasing because without a build CI will likely fail anyway
+  rebase-strategy: "disabled"
+

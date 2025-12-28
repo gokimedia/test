@@ -1,0 +1,8 @@
+{ "translations": {
+    "Send a notification" : "通知を送信",
+    "Triggers a notification" : "通知のトリガー",
+    "Flow Notifications" : "フロー通知",
+    "Notification action for Nextcloud Flow" : "Nextcloud Flowの通知アクション",
+    "Choose a notification title (optional)" : "通知のタイトルを選択する（オプション）"
+},"pluralForm" :"nplurals=1; plural=0;"
+}

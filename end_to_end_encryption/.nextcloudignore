@@ -1,0 +1,32 @@
+# SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+.git
+/.github
+/.tx
+/doc
+/node_modules
+/patches
+/screenshots
+/src
+/tests
+/vendor
+/vendor-bin
+/__tests__
+/.gitattributes
+/.gitignore
+/.l10nignore
+/.nextcloudignore
+/.php-cs-fixer.dist.php
+/composer.json
+/composer.lock
+/eslint.config.js
+/krankerl.toml
+/openapi.json
+/package.json
+/package-lock.json
+/playwright.config.ts
+/psalm.xml
+/stylelint.config.cjs
+/tsconfig.json
+/vite.config.ts
+/vitest.config.ts

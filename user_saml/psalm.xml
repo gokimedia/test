@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+ - SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+ - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+<psalm
+    errorLevel="4"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    errorBaseline="tests/psalm-baseline.xml"
+	findUnusedBaselineEntry="true"
+	findUnusedCode="false"
+	phpVersion="8.1"
+>
+	<stubs>
+		<file name="tests/stub.phpstub" preloadClasses="true"/>
+		<file name="tests/stubs/doctrine_dbal_schema_abstractasset.php" />
+		<file name="tests/stubs/doctrine_dbal_schema_column.php" />
+		<file name="tests/stubs/doctrine_dbal_schema_schema.php" />
+		<file name="tests/stubs/doctrine_dbal_schema_table.php" />
+	</stubs>
+    <projectFiles>
+        <directory name="lib" />
+    </projectFiles>
+	<extraFiles>
+		<directory name="vendor" />
+		<directory name="vendor-bin/psalm/vendor" />
+	</extraFiles>
+	<issueHandlers>
+		<DeprecatedClass errorLevel="info" />
+		<DeprecatedMethod errorLevel="info" />
+		<DeprecatedProperty errorLevel="info" />
+		<DeprecatedFunction errorLevel="info" />
+		<DeprecatedConstant errorLevel="info" />
+		<UndefinedClass>
+			<errorLevel type="suppress">
+				<referencedClass name="Symfony\Component\Console\Command\Command"/>
+			</errorLevel>
+		</UndefinedClass>
+	</issueHandlers>
+</psalm>

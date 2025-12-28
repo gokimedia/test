@@ -1,0 +1,172 @@
+# SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: MIT
+name: Integration tests
+
+on: pull_request
+
+permissions:
+  contents: read
+
+env:
+  APP_NAME: user_saml
+  LDAP_SUFFIX: dc=idptestbed
+  LDAP_CR_NAME: directory
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+
+    outputs:
+      src: ${{ steps.changes.outputs.src}}
+
+    steps:
+      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+        id: changes
+        continue-on-error: true
+        with:
+          filters: |
+            src:
+              - '.github/workflows/integration.yml'
+              - 'appinfo/**'
+              - 'lib/**'
+              - 'templates/**'
+              - 'tests/**'
+              - 'vendor/**'
+              - 'composer.json'
+              - 'composer.lock'
+
+  integration:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: [ "8.1", "8.2", "8.3", "8.4" ]
+        databases: [ "mysql" ]
+        server-versions: [ "stable30", "stable31", "stable32", "master" ]
+        exclude:
+          - server-versions: "master"
+            php-versions: "8.1"
+            databases: "mysql"
+          - server-versions: "stable30"
+            php-versions: "8.2"
+            databases: "mysql"
+          - server-versions: "stable30"
+            php-versions: "8.4"
+            databases: "mysql"
+        include:
+          - server-versions: "stable30"
+            php-versions: "8.3"
+            databases: "sqlite"
+          - server-versions: "stable30"
+            php-versions: "8.3"
+            databases: "pgsql"
+
+    name: Integration php${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.server-versions }}
+
+    services:
+      postgres:
+        image: postgres:14
+        ports:
+          - 4445:5432/tcp
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: rootpassword
+          POSTGRES_DB: nextcloud
+        options: --health-cmd pg_isready --health-interval 5s --health-timeout 2s --health-retries 5
+      mysql:
+        image: mariadb:10.5
+        ports:
+          - 4444:3306/tcp
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+        options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
+      directory:
+        image: ghcr.io/nextcloud/continuous-integration-user_saml-dirsrv:latest # zizmor: ignore[unpinned-images]
+        ports:
+          - 389:3389/tcp
+        options:
+          --name directory
+      sso:
+        image: ghcr.io/nextcloud/continuous-integration-user_saml_shibboleth-idp:latest # zizmor: ignore[unpinned-images]
+        ports:
+          - 4443:8443/tcp
+          - 9090:8080/tcp
+
+    steps:
+      - name: Checkout server
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+          repository: nextcloud/server
+          ref: ${{ matrix.server-versions }}
+          submodules: true
+
+      - name: Checkout app
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+          path: apps/${{ env.APP_NAME }}
+
+      - name: Set up php ${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # v2.35.5
+        with:
+          php-version: ${{ matrix.php-versions }}
+          # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
+          extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, sqlite, pdo_sqlite, mysql, pdo_mysql, pgsql, pdo_pgsql
+          coverage: none
+          ini-file: production
+          ini-values: disabled_functions=
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: DEBUG diagnose PHP modules
+        run: |
+          echo 'extension=pcntl.so' | sudo tee /etc/php/${{ matrix.php-versions }}/fpm/conf.d/10-pcntl.ini
+          php -m
+
+      - name: Set up dependencies
+        working-directory: apps/${{ env.APP_NAME }}
+        run: composer i --no-dev
+
+      - name: Set up Nextcloud
+        run: |
+          if [ "${{ matrix.databases }}" = "mysql" ]; then
+            export DB_PORT=4444
+          elif [ "${{ matrix.databases }}" = "pgsql" ]; then
+            export DB_PORT=4445
+          fi
+          mkdir data
+          ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
+          ./occ app:enable --force ${{ env.APP_NAME }}
+          cat << EOF > config/debug.config.php
+          <?php
+          \$CONFIG = [
+            'log.condition' => ['apps' => ['user_saml']],
+          ];
+          EOF
+          PHP_CLI_SERVER_WORKERS=4 php -S localhost:8080 &
+
+      - name: Run behat
+        working-directory: apps/${{ env.APP_NAME }}/tests/integration
+        run: |
+          composer install
+          ./vendor/bin/behat --colors
+
+      - name: Dump nextcloud.log
+        if: always()
+        run: cat data/nextcloud.log
+
+  summary:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest-low
+    needs: [changes, integration]
+
+    if: always()
+
+    name: integration-summary
+
+    steps:
+      - name: Summary status
+        run: if ${{ needs.changes.outputs.src != 'false' && needs.integration.result != 'success' }}; then exit 1; fi

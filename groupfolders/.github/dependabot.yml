@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  open-pull-requests-limit: 10
+- package-ecosystem: composer
+  directories:
+  - /
+  - /vendor-bin/cs-fixer
+  - /vendor-bin/openapi-extractor
+  - /vendor-bin/phpunit
+  - /vendor-bin/psalm
+  - /vendor-bin/rector
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  open-pull-requests-limit: 10

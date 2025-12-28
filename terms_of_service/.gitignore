@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+.DS_Store
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# l10n
+translationfiles
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Compiled templates
+/build
+/js/terms_of_service_*.js*
+
+# Testing
+/tests/.phpunit.result.cache
+
+# Development
+/vendor-bin/*/vendor

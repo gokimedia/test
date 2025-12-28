@@ -1,0 +1,13 @@
+{
+	"config": {
+		"platform": {
+			"php": "8.2"
+		},
+		"sort-packages": true
+	},
+	"require-dev": {
+		"behat/behat": "^3.29.0",
+		"guzzlehttp/guzzle": "^7.10.0",
+		"phpunit/phpunit": "^11.5"
+	}
+}

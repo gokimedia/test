@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{# SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors #}
+{# SPDX-License-Identifier: AGPL-3.0-or-later #}
+
+{% block head-title %}{% trans 'Generate app' %} - {% endblock %}
+
+{% block content %}
+    <div class="app-form">
+        <h1>{% trans 'Generate app' %}</h1>
+        <hr>
+        <form id="app-generate-form" method="post" action="{% url 'app-scaffold' %}">
+            {% csrf_token %}
+            {% include 'form-fields.html' %}
+            <button id="submit" class="btn btn-primary btn-block">
+                <span class="icon icon-creation-outline icon-white icon-invert"></span>
+                {% trans 'Generate and download' %}
+            </button>
+        </form>
+    </div>
+{% endblock %}

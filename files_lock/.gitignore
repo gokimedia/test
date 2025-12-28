@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 20^19 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+\.idea/
+
+/build/
+/css/
+/js/
+/vendor/
+/node_modules/
+/playwright-report/
+
+.php-cs-fixer.cache
+.phpunit.result.cache
